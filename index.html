@@ -1,0 +1,2509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Guru Journal</title>
+<style>
+  :root {
+    --paper: #faf7f2;
+    --ink: #2a2622;
+    --sub: #6b645c;
+    --line: #e4ddd2;
+    --card: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 18px;
+  }
+  header {
+    padding: 28px 32px 18px;
+    border-bottom: 1px solid var(--line);
+    background: var(--card);
+  }
+  header h1 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 34px;
+    margin: 0 0 4px;
+  }
+  header .sub {
+    color: var(--sub);
+    font-size: 16px;
+  }
+  nav.tabs {
+    display: flex;
+    gap: 4px;
+    margin-top: 16px;
+  }
+  nav.tabs button {
+    border: 1px solid var(--line);
+    background: var(--paper);
+    padding: 10px 18px;
+    border-radius: 8px 8px 0 0;
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--sub);
+  }
+  nav.tabs button.active {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 28px 20px 80px;
+  }
+  .view { display: none; }
+  .view.active { display: block; }
+
+  .day-block { margin-bottom: 32px; }
+  .day-header {
+    font-family: Georgia, serif;
+    font-size: 19px;
+    color: var(--sub);
+    border-bottom: 1px dashed var(--line);
+    padding-bottom: 6px;
+    margin-bottom: 14px;
+    letter-spacing: 0.02em;
+  }
+  .entry-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--accent, #999);
+    border-radius: 6px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
+  }
+  .sample-banner {
+    display: inline-block;
+    background: #fff3cd;
+    color: #8a6d00;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  .entry-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .avatar {
+    width: 34px; height: 34px; border-radius: 50%;
+    color: #fff; display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px; flex-shrink: 0;
+  }
+  .avatar.sm { width: 32px; height: 32px; font-size: 14px; }
+  .entry-person { font-weight: 600; font-size: 17px; }
+  .entry-handle { color: var(--sub); font-size: 14.5px; margin-left: 4px; }
+  .entry-platform { color: var(--sub); font-size: 14.5px; }
+  .type-badge {
+    color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 0.04em;
+    padding: 3px 8px; border-radius: 4px; margin-left: 6px; vertical-align: middle;
+  }
+  .entry-author { color: var(--sub); font-size: 13.5px; margin-left: 6px; font-style: italic; }
+  .entry-text { font-size: 17px; line-height: 1.55; margin-bottom: 10px; }
+  .tags-row { margin-bottom: 8px; }
+  .tag {
+    display: inline-block;
+    font-size: 13.5px;
+    padding: 4px 10px;
+    border-radius: 12px;
+    margin-right: 6px;
+    margin-bottom: 4px;
+  }
+  .tag-model { background: #e7f0fb; color: #2a5c9a; }
+  .tag-platform { background: #eef5ea; color: #3f6b32; }
+  .mentions-row { font-size: 14.5px; color: var(--sub); margin-bottom: 8px; }
+  .mention-chip {
+    display: inline-block;
+    background: #f1eee7;
+    padding: 3px 9px;
+    border-radius: 10px;
+    margin-right: 4px;
+    font-size: 13.5px;
+  }
+  .mini-new {
+    background: #d94f4f; color: #fff; font-size: 9px; padding: 1px 5px;
+    border-radius: 6px; margin-left: 3px; font-weight: 700;
+  }
+  .article-card {
+    background: #f6f4ef;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin: 8px 0;
+    font-size: 15.5px;
+  }
+  .article-label { font-weight: 700; font-size: 12px; color: var(--sub); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px; }
+  .article-link { color: #2a5c9a; word-break: break-all; }
+  .article-summary { margin-top: 6px; color: var(--ink); line-height: 1.5; }
+  .angle { font-size: 15.5px; color: var(--sub); line-height: 1.5; border-top: 1px dashed var(--line); padding-top: 8px; margin-top: 8px; }
+  .angle-label { font-weight: 700; color: var(--ink); }
+  .context-box {
+    background: #f2f6fa;
+    border: 1px solid #d9e4ee;
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin: 8px 0;
+  }
+  .context-label { font-weight: 700; font-size: 12px; color: #3b6ea5; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; }
+  .context-item { margin-bottom: 8px; }
+  .context-item:last-child { margin-bottom: 0; }
+  .context-term { font-weight: 700; font-size: 15px; color: var(--ink); }
+  .context-type {
+    font-weight: 600; font-size: 11px; color: #3b6ea5; background: #dce8f4;
+    padding: 2px 7px; border-radius: 8px; margin-left: 6px; text-transform: uppercase; letter-spacing: 0.03em;
+  }
+  .context-note { font-size: 14.5px; line-height: 1.55; color: var(--ink); margin-top: 3px; }
+  .engagement-row {
+    display: flex; gap: 16px; margin: 8px 0; font-size: 14.5px; color: var(--sub);
+  }
+  .eng-stat { white-space: nowrap; }
+  .engagement-flag {
+    background: #fdeaea; color: #a33a3a; border: 1px solid #f0c9c9;
+    border-radius: 6px; padding: 8px 10px; font-size: 13.5px; line-height: 1.5; margin: 6px 0 8px;
+  }
+  .replies-box {
+    background: #faf8f4; border: 1px solid var(--line); border-radius: 6px;
+    padding: 10px 12px; margin: 8px 0;
+  }
+  .replies-label { font-weight: 700; font-size: 12px; color: var(--sub); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 8px; }
+  .reply-item { margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dashed var(--line); }
+  .reply-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+  .reply-author { font-weight: 600; font-size: 14.5px; }
+  .reply-handle { font-size: 13px; color: var(--sub); }
+  .reply-text { font-size: 14.5px; line-height: 1.5; margin: 3px 0; color: var(--ink); }
+  .reply-stats { font-size: 12.5px; color: var(--sub); }
+
+  .people-section-label {
+    font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--sub); margin: 24px 0 12px; font-weight: 700;
+  }
+  .discovered-label { color: #a33a3a; }
+  .people-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+  }
+  .person-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--accent, #999);
+    border-radius: 6px;
+    padding: 14px;
+  }
+  .person-card-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .person-name { font-weight: 600; font-size: 16.5px; }
+  .person-handle { font-size: 14px; color: var(--sub); }
+  .person-cat { font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 700; margin-bottom: 6px; }
+  .person-tag-row { margin-bottom: 6px; }
+  .person-tag {
+    display: inline-block; background: #eef0f6; color: #3d4460;
+    font-size: 12px; font-weight: 600; padding: 2px 9px; border-radius: 10px;
+  }
+  .person-tag-note { font-size: 13.5px; line-height: 1.5; color: var(--sub); margin-top: 6px; font-style: italic; }
+  .person-bio { font-size: 15px; line-height: 1.5; color: var(--ink); }
+  .new-badge {
+    background: #d94f4f; color: #fff; font-size: 11px; padding: 2px 7px;
+    border-radius: 6px; font-weight: 700; margin-left: 4px;
+  }
+
+  .network-row {
+    display: flex; gap: 10px; align-items: center;
+    padding: 10px 12px; border-bottom: 1px solid var(--line);
+    font-size: 16px; flex-wrap: wrap;
+  }
+  .net-person { font-weight: 600; }
+  .net-arrow { color: var(--sub); font-size: 14.5px; }
+  .net-date { margin-left: auto; color: var(--sub); font-size: 13.5px; }
+  .empty-state { color: var(--sub); font-size: 15px; padding: 20px; text-align: center; }
+</style>
+</head>
+<body>
+<header>
+  <h1>AI Guru Journal</h1>
+  <div class="sub">Dynamic tracker of AI industry commentary · generated 2026-08-12T14:00:00-04:00</div>
+  <nav class="tabs">
+    <button class="tab-btn active" data-view="journal">Journal</button>
+    <button class="tab-btn" data-view="people">People (53)</button>
+    <button class="tab-btn" data-view="network">Network</button>
+  </nav>
+</header>
+<main>
+  <div class="view active" id="view-journal">
+
+    <div class="day-block">
+      <div class="day-header">2026-08-12</div>
+      <div class="day-entries">
+
+    <div class="entry-card" style="--accent:#c1622d">
+
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#c1622d">C</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Charlie Bilello</span>
+          <span class="entry-handle">@charliebilello</span>
+          <span class="entry-platform">· X</span>
+          <span class="type-badge" style="background:#6b6b6b">X POST</span>
+
+        </div>
+      </div>
+      <div class="entry-text">12.9% of credit card balances in the US are 90+ days delinquent, near the highest since 2011. 10.6% of student loan balances are now 90+ days delinquent, the highest since 2020. 5.5% of auto loan balances are 90+ days delinquent, just off the highest level on record.</div>
+      <div class="tags-row"><span class="tag tag-platform">Consumer credit</span></div>
+
+
+        <div class="engagement-row">
+          <span class="eng-stat">💬 50</span>
+          <span class="eng-stat">🔁 105</span>
+          <span class="eng-stat">❤ 446</span>
+          <span class="eng-stat">👁 46K</span>
+        </div>
+
+
+
+
+      <div class="angle"><span class="angle-label">Investment angle:</span> Not AI-specific, but a concrete consumer-credit-stress data point worth tracking alongside the AI-driven-productivity/profit-margin thesis (see Cathie Wood's 13.2%-of-GDP profit-share post) -- rising delinquencies across card, student, and auto debt could be an early counter-signal to the 'AI is lifting the whole economy' narrative if it shows up in discretionary spend on AI-exposed consumer names.</div>
+    </div>
+
+    <div class="entry-card" style="--accent:#b8860b">
+
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#b8860b">B</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Bill Gurley</span>
+          <span class="entry-handle">@bgurley</span>
+          <span class="entry-platform">· X</span>
+          <span class="type-badge" style="background:#6b6b6b">X POST</span>
+
+        </div>
+      </div>
+      <div class="entry-text">Time to head to Texas or Nevada. Staying is adding unnecessary risks for your shareholders. You should act in your shareholders best interest and flee Delaware. Delaware is no longer consistent. They are targeting companies they don't like. [Leave Delaware: JUST IN: DoorDash is leaving Delaware for Nevada. Stockholders controlling 54.2% of DoorDash's voting power have approved the reincorporation, including cofounders Tony Xu, Andy Fang and Stanley Tang. The board unanimously backed the move.]</div>
+      <div class="tags-row"><span class="tag tag-platform">Corporate governance</span><span class="tag tag-platform">Delaware reincorporation</span></div>
+      <div class="mentions-row">Mentioned: <span class="mention-chip">@LeaveDelaware</span></div>
+
+        <div class="engagement-row">
+          <span class="eng-stat">💬 33</span>
+          <span class="eng-stat">🔁 36</span>
+          <span class="eng-stat">❤ 854</span>
+          <span class="eng-stat">👁 98K</span>
+        </div>
+        <div class="engagement-flag">⚠ Unusual engagement — 33 replies is roughly 16x Gurley's own historical norm on this journal (his prior tracked post, e-gurley-0806, drew just 2 replies on a much larger 361K-view base) and the reply-to-view ratio is also far higher than his usual posts, not just proportional to reach. Checked the actual top replies: they show substantive disagreement (a reply arguing Delaware remains the best domicile for real shareholder protections, another noting Tesla shareholders may push back) rather than just pile-on agreement -- genuine debate, not routine high-follower noise.</div>
+        <div class="replies-box"><div class="replies-label">Top replies</div>
+                <div class="reply-item">
+                  <div class="reply-head"><span class="reply-author">Compound248</span> <span class="reply-handle">@compound248</span></div>
+                  <div class="reply-text">Basically only passed because the founders + Sequoia jammed it through, forcing it on everyone else. Delaware is, by far, the best domicile for incorporation because it a) has real shareholder protections; and b) is a highly predictable legal system. Texas and Nevada are…meh.</div>
+                  <div class="reply-stats">❤ 786 · 🔁  · 💬 </div>
+                </div>
+
+                <div class="reply-item">
+                  <div class="reply-head"><span class="reply-author">grant</span> <span class="reply-handle">@grantbelden</span></div>
+                  <div class="reply-text">TSLA shareholders are likely gonna disagree at a point</div>
+                  <div class="reply-stats">❤ 315 · 🔁  · 💬 4</div>
+                </div>
+
+                <div class="reply-item">
+                  <div class="reply-head"><span class="reply-author">Paul Yacoubian</span> <span class="reply-handle">@PaulYacoubian</span></div>
+                  <div class="reply-text">@jeff_weinstein need these states added to Stripe Atlas</div>
+                  <div class="reply-stats">❤ 460 · 🔁 7 · 💬 1</div>
+                </div>
+                </div>
+
+      <div class="context-box"><div class="context-label">Background</div>
+            <div class="context-item">
+              <div class="context-term">Leave Delaware <span class="context-type">What</span></div>
+              <div class="context-note">An advocacy account/campaign encouraging US public companies to reincorporate outside Delaware (typically to Texas or Nevada), citing concerns about the predictability of Delaware's Court of Chancery after several high-profile rulings (e.g. against Elon Musk/Tesla). Not a confirmed formal organization -- appears to be a single-purpose advocacy account amplifying reincorporation moves.</div>
+            </div>
+            </div>
+      <div class="angle"><span class="angle-label">Investment angle:</span> Not AI-specific, but relevant to the broader 'exit Delaware' trend among high-profile tech/AI-adjacent companies (following Tesla's earlier move) that Gurley is actively cheerleading -- worth tracking whether any AI-lab-adjacent or portfolio companies follow DoorDash's reincorporation path, given potential shifts in shareholder-litigation exposure and governance norms.</div>
+    </div>
+
+    <div class="entry-card" style="--accent:#b8860b">
+
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#b8860b">C</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Cathie Wood</span>
+          <span class="entry-handle">@CathieDWood</span>
+          <span class="entry-platform">· X</span>
+          <span class="type-badge" style="background:#6b6b6b">X POST</span>
+
+        </div>
+      </div>
+      <div class="entry-text">I'm proud to support @bitcoinpolicy's open letter urging frontier AI labs to open a clear pathway for qualified open-source defenders. AI could become the most powerful defensive technology in history. Attackers already are exploiting it. Defenders cannot be left behind. [Bitcoin Policy Institute: Today, Bitcoin Policy Institute and a broad coalition from across the digital-asset ecosystem are publishing an open letter calling on the world's leading AI labs to provide qualified open-source defenders with trusted access to frontier AI models.]</div>
+      <div class="tags-row"><span class="tag tag-platform">AI cybersecurity / open-source defense</span></div>
+      <div class="mentions-row">Mentioned: <span class="mention-chip">@bitcoinpolicy</span></div>
+
+        <div class="engagement-row">
+          <span class="eng-stat">💬 35</span>
+          <span class="eng-stat">🔁 64</span>
+          <span class="eng-stat">❤ 576</span>
+          <span class="eng-stat">👁 101K</span>
+        </div>
+
+
+
+      <div class="context-box"><div class="context-label">Background</div>
+            <div class="context-item">
+              <div class="context-term">Bitcoin Policy Institute <span class="context-type">What</span></div>
+              <div class="context-note">A policy advocacy organization focused on digital-asset and Bitcoin-related policy; here leading a coalition open letter (with unspecified digital-asset ecosystem co-signers) asking frontier AI labs to grant qualified open-source security researchers ('defenders') trusted access to frontier models, framed as a cybersecurity-defense equity issue.</div>
+            </div>
+            </div>
+      <div class="angle"><span class="angle-label">Investment angle:</span> This lands the same week OpenAI (GPT-5.6-Cyber, Daybreak) and Anthropic (Project Glasswing, tracked earlier) both pushed AI-for-cybersecurity-defense narratives -- Wood amplifying a call for open-source defenders to get frontier-model access suggests the 'AI as cyberdefense tool' framing is gaining cross-industry traction beyond the labs themselves, potentially relevant to security-software names competing or partnering with frontier labs.</div>
+    </div>
+
+    <div class="entry-card" style="--accent:#4a8f5c">
+
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#4a8f5c">A</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Aravind Srinivas</span>
+          <span class="entry-handle">@AravSrinivas</span>
+          <span class="entry-platform">· X</span>
+          <span class="type-badge" style="background:#6b6b6b">X POST</span>
+
+        </div>
+      </div>
+      <div class="entry-text">Nemotron 3.5 Lightning available to all developers on the Perplexity Agent API. Input: $0.0115 per 1M tokens. Output: $0.17 per 1M tokens. [Perplexity Developers: .@nvidia Nemotron 3.5 Lightning is now available in the Perplexity Agent API. An open 30B MoE model with 3B active parameters, built for the high-volume execution layer of always-on agents: tool calls, validation, and subagent work.]</div>
+      <div class="tags-row"><span class="tag tag-model">Nemotron 3.5 Lightning</span><span class="tag tag-platform">Perplexity</span><span class="tag tag-platform">Nvidia</span></div>
+      <div class="mentions-row">Mentioned: <span class="mention-chip">@perplexitydevs</span><span class="mention-chip">@nvidia</span></div>
+
+        <div class="engagement-row">
+          <span class="eng-stat">💬 10</span>
+          <span class="eng-stat">🔁 10</span>
+          <span class="eng-stat">❤ 140</span>
+          <span class="eng-stat">👁 19K</span>
+        </div>
+
+
+
+      <div class="context-box"><div class="context-label">Background</div>
+            <div class="context-item">
+              <div class="context-term">Nemotron 3.5 Lightning <span class="context-type">What's new</span></div>
+              <div class="context-note">Nvidia's open-weight Nemotron family model, described as a 30B-parameter mixture-of-experts (MoE) model with 3B active parameters, positioned for high-volume, low-latency 'execution layer' tasks in agent workflows (tool calls, validation, subagent work) rather than top-end reasoning. Priced on Perplexity's Agent API at $0.0115/1M input tokens and $0.17/1M output tokens.</div>
+            </div>
+            </div>
+      <div class="angle"><span class="angle-label">Investment angle:</span> Nvidia pushing further into the model layer (not just chips) via Nemotron, and Perplexity adopting it as a cheap execution-layer model for agent tool-calls, is a concrete data point on falling per-token agent costs and Nvidia's software/model ambitions extending beyond hardware -- relevant to margin trajectories for AI-native app builders and to Nvidia's diversification narrative.</div>
+    </div>
+
+    <div class="entry-card" style="--accent:#3b6ea5">
+
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#3b6ea5">E</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Elon Musk</span>
+          <span class="entry-handle">@elonmusk</span>
+          <span class="entry-platform">· X</span>
+          <span class="type-badge" style="background:#6b6b6b">X POST</span>
+
+        </div>
+      </div>
+      <div class="entry-text">Moonbase Alpha will be so cool. And we want to make it so that anyone can go to the Moon if they want. [X Freeze: SpaceX is getting very close to building the first serious base on the Moon. Starship changes the entire equation. It is designed to deliver up to 100 tonnes directly to the lunar surface.]</div>
+      <div class="tags-row"><span class="tag tag-platform">SpaceX</span></div>
+      <div class="mentions-row">Mentioned: <span class="mention-chip">@X Freeze <span class="mini-new">new</span></span></div>
+
+        <div class="engagement-row">
+          <span class="eng-stat">💬 6.3K</span>
+          <span class="eng-stat">🔁 5.9K</span>
+          <span class="eng-stat">❤ 46K</span>
+          <span class="eng-stat">👁 3.9M</span>
+        </div>
+
+
+
+
+      <div class="angle"><span class="angle-label">Investment angle:</span> Not AI-specific -- SpaceX/lunar content. Included because Musk is tracked and this is his first entry in the journal; no direct AI-investment read-through, though SpaceX's compute/power buildout ambitions (see also his separate 'Terafab Texas' posts) are adjacent to the broader AI-infrastructure capex theme. Engagement (6.3K replies) is the highest of any post captured this run, but checked top replies and they're overwhelmingly jokes/reactions rather than substantive debate, so this looks like Musk's routine baseline reach rather than a genuine controversy -- not flagged.</div>
+    </div>
+
+    <div class="entry-card" style="--accent:#3b6ea5">
+
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#3b6ea5">D</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Demis Hassabis</span>
+          <span class="entry-handle">@demishassabis</span>
+          <span class="entry-platform">· X</span>
+          <span class="type-badge" style="background:#6b6b6b">X POST</span>
+
+        </div>
+      </div>
+      <div class="entry-text">1B for the @GeminiApp! Our fastest growing product ever. Incredible milestone - huge congratulations to @joshwoodward and the amazing team! [Sundar Pichai: 1B+ people are now using @GeminiApp every month to spark new ideas and get things done. It's our fastest growing product ever, and our 14th to hit the 1B-user mark.]</div>
+      <div class="tags-row"><span class="tag tag-model">Gemini</span><span class="tag tag-platform">Google</span><span class="tag tag-platform">Gemini App</span></div>
+      <div class="mentions-row">Mentioned: <span class="mention-chip">@Sundar Pichai <span class="mini-new">new</span></span><span class="mention-chip">@joshwoodward</span></div>
+
+        <div class="engagement-row">
+          <span class="eng-stat">💬 85</span>
+          <span class="eng-stat">🔁 101</span>
+          <span class="eng-stat">❤ 2.1K</span>
+          <span class="eng-stat">👁 144K</span>
+        </div>
+
+
+
+
+      <div class="angle"><span class="angle-label">Investment angle:</span> Gemini App crossing 1B monthly users (per Pichai, Google's 14th product to hit that mark) is a concrete consumer-scale data point for Google's AI consumer distribution advantage via Android/Search default placement -- relevant to assessing Google's competitive position against ChatGPT's consumer user base, especially as this lands the same week as the DeepMind leadership reshuffle already tracked in this journal.</div>
+    </div>
+
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="day-header">2026-08-11</div>
+      <div class="day-entries">
+
+    <div class="entry-card" style="--accent:#b8860b">
+
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#b8860b">A</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Anthony Pompliano</span>
+          <span class="entry-handle">@APompliano</span>
+          <span class="entry-platform">· X</span>
+          <span class="type-badge" style="background:#6b6b6b">X POST</span>
+
+        </div>
+      </div>
+      <div class="entry-text">Most people don't realize that $BRR is one of the first AI research labs to be publicly traded. It is my job to explain what that means to people and help them understand how our team &amp; technology can create value over time. We already beat frontier labs in our chosen areas...</div>
+      <div class="tags-row"><span class="tag tag-platform">ProCap Financial</span><span class="tag tag-platform">Nasdaq: BRR</span></div>
+
+
+        <div class="engagement-row">
+          <span class="eng-stat">💬 50</span>
+          <span class="eng-stat">🔁 5</span>
+          <span class="eng-stat">❤ 135</span>
+          <span class="eng-stat">👁 62K</span>
+        </div>
+
+
+
+      <div class="context-box"><div class="context-label">Background</div>
+            <div class="context-item">
+              <div class="context-term">ProCap Financial / $BRR <span class="context-type">What</span></div>
+              <div class="context-note">Nasdaq-listed (BRR) company chaired and led as CEO by Anthony Pompliano; through subsidiary CFO Silvia, Inc. it operates as a finance-focused AI agent lab. Raised over $750M from investors. Markets itself as the first publicly traded AI model &amp; agent lab, with its Silvia model recently claiming the top score (8.73) on a tax-knowledge benchmark test, ahead of Claude Desktop (8.40) -- an independently-run, third-party verification of this benchmark claim was not found in this pull.</div>
+            </div>
+            </div>
+      <div class="angle"><span class="angle-label">Investment angle:</span> Material disclosure caveat: Pompliano is Chairman and CEO of ProCap Financial (Nasdaq: BRR) itself, so this is founder self-promotion of his own stock, not independent commentary -- treat accordingly. That said, BRR (via subsidiary CFO Silvia) is a real, Nasdaq-listed, finance-focused AI agent company that has raised $750M+ and claims its Silvia model scored highest (8.73) on a tax-knowledge benchmark, ahead of Claude Desktop (8.40). Worth a closer look as a narrow, finance-vertical AI-model public equity comp, but verify all performance claims independently given the conflict of interest.</div>
+    </div>
+
+    <div class="entry-card" style="--accent:#6b6b6b">
+
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#6b6b6b">R</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Rowan Cheung</span>
+          <span class="entry-handle">@rowancheung</span>
+          <span class="entry-platform">· X</span>
+          <span class="type-badge" style="background:#6b6b6b">X POST</span>
+
+        </div>
+      </div>
+      <div class="entry-text">Open source is so back. Zuck just announced Meta is opening the weights for Muse Glimmer, with Muse Spark 1.2 coming soon. But a year ago, everyone doubted Meta's position in the AI race. In an interview I did with him, he admitted where they missed the mark: "Llama 4 was not..." [Mark Zuckerberg: Today we're also opening the weights for Muse Glimmer, a great 30B parameter dense model that can run locally. Soon we'll also release the weights for Muse Spark 1.2, our latest foundation model. Meta is a strong supporter of open source and I'm proud of these releases.]</div>
+      <div class="tags-row"><span class="tag tag-model">Muse Glimmer</span><span class="tag tag-model">Muse Spark 1.2</span><span class="tag tag-platform">Meta</span></div>
+      <div class="mentions-row">Mentioned: <span class="mention-chip">@Mark Zuckerberg <span class="mini-new">new</span></span></div>
+
+        <div class="engagement-row">
+          <span class="eng-stat">💬 31</span>
+          <span class="eng-stat">🔁 7</span>
+          <span class="eng-stat">❤ 101</span>
+          <span class="eng-stat">👁 37K</span>
+        </div>
+
+
+
+      <div class="context-box"><div class="context-label">Background</div>
+            <div class="context-item">
+              <div class="context-term">Muse Glimmer / Muse Spark <span class="context-type">What's new</span></div>
+              <div class="context-note">Newly named Meta open-weight model family (Muse Glimmer: a 30B-parameter dense model runnable locally; Muse Spark 1.2: described as Meta's latest foundation model, weights coming soon). Appears to succeed or run alongside the Llama line -- Zuckerberg referenced Llama 4 as a prior misstep in this same exchange, suggesting Muse may represent a rebranded or next-generation open-model effort.</div>
+            </div>
+            </div>
+      <div class="angle"><span class="angle-label">Investment angle:</span> Meta re-committing to open-weight releases (Muse Glimmer now, Muse Spark 1.2 coming) after the acknowledged Llama 4 stumble signals a course-correction toward the open-model strategy that drove earlier developer mindshare -- relevant to the broader open-vs-closed-model competitive dynamic already tracked via Google's Gemma and echoed by Demis Hassabis and Bill Gurley in this journal.</div>
+    </div>
+
+    <div class="entry-card" style="--accent:#b8860b">
+
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#b8860b">P</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Patrick O'Shaughnessy</span>
+          <span class="entry-handle">@patrick_oshag</span>
+          <span class="entry-platform">· X</span>
+          <span class="type-badge" style="background:#6b6b6b">X POST</span>
+
+        </div>
+      </div>
+      <div class="entry-text">My conversation with @ericvishria of Benchmark. Eric has spent a decade investing across software and hardware, backing companies like Fireworks, Sierra, Sunday Robotics, and Cerebras. Eric says the biggest mistake investors made in cloud was undersizing the market, and everyone is doing it again with AI: "In 2014, a really common narrative was AWS is going to eat everything. There's no enterprise opportunity left. Think about 2014 to now. You have Snowflake..."</div>
+      <div class="tags-row"><span class="tag tag-platform">Venture capital / AI infrastructure</span></div>
+      <div class="mentions-row">Mentioned: <span class="mention-chip">@Eric Vishria <span class="mini-new">new</span></span></div>
+
+        <div class="engagement-row">
+          <span class="eng-stat">💬 14</span>
+          <span class="eng-stat">🔁 28</span>
+          <span class="eng-stat">❤ 261</span>
+          <span class="eng-stat">👁 72K</span>
+        </div>
+
+
+
+      <div class="context-box"><div class="context-label">Background</div>
+            <div class="context-item">
+              <div class="context-term">Eric Vishria <span class="context-type">Who</span></div>
+              <div class="context-note">General Partner at Benchmark; has spent roughly a decade investing across software and hardware, with portfolio companies including Fireworks AI, Sierra, Sunday Robotics, and Cerebras.</div>
+            </div>
+            </div>
+      <div class="angle"><span class="angle-label">Investment angle:</span> A Benchmark GP's explicit thesis that investors are repeating the 2014 'cloud market is already saturated' mistake with AI -- i.e. underestimating how much new enterprise value AI unlocks beyond the incumbents -- is a useful counter-frame to bubble-skepticism entries elsewhere in this journal (e.g. Burry, LeCun); worth weighing against those views rather than in isolation.</div>
+    </div>
+
+    <div class="entry-card" style="--accent:#3b6ea5">
+
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#3b6ea5">D</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Dario Amodei</span>
+          <span class="entry-handle">@DarioAmodei</span>
+          <span class="entry-platform">· DCD</span>
+          <span class="type-badge" style="background:#a3661f">ARTICLE</span>
+          <span class="entry-author">by Dan Swinhoe</span>
+        </div>
+      </div>
+      <div class="entry-text">DCD: "GIC and Macquarie form Theseus Infrastructure to serve Anthropic's data center needs." Anthropic, Macquarie Asset Management, and GIC announced a strategic partnership this week to establish Theseus Infrastructure, a new platform to develop, operate, and lease data center infrastructure at scale to Anthropic under long-term agreements, with an initial focus on the US. Corroborated by Bloomberg and Yahoo Finance coverage of the same announcement.</div>
+      <div class="tags-row"><span class="tag tag-platform">Anthropic</span><span class="tag tag-platform">Data center financing</span></div>
+
+
+
+        <div class="article-card">
+          <div class="article-label">Linked article</div>
+          <a href="https://www.datacenterdynamics.com/en/news/gic-and-macquarie-form-theseus-infrastructure-to-serve-anthropics-data-center-needs/" target="_blank" class="article-link">https://www.datacenterdynamics.com/en/news/gic-and-macquarie-form-theseus-infrastructure-to-serve-anthropics-data-center-needs/</a>
+          <div class="article-summary">GIC and funds managed by Macquarie will own Theseus and fund the majority of equity for each project; Anthropic is the anchor tenant, not an owner, and will reimburse consumer electricity bill increases tied to the buildout. No specific spending figure was disclosed for Theseus itself -- separate from the previously-announced $50B Anthropic plans to spend on US data centers (with Fluidstack in Texas and New York) and a $35B loan guaranteed by Google. Anthropic is also known to lease capacity from TeraWulf, Hut 8, and SpaceX, and confirmed last week it is building an in-house AI accelerator chip design team. GIC previously invested directly in Anthropic and has a wide data center portfolio (Vantage EMEA, Equinix xScale, EdgeCore); Macquarie's data center investments include Netrality, Applied Digital, and Virtus (having exited AirTrunk and Aligned).</div>
+        </div>
+
+      <div class="context-box"><div class="context-label">Background</div>
+            <div class="context-item">
+              <div class="context-term">Theseus Infrastructure <span class="context-type">What</span></div>
+              <div class="context-note">New data center development/operating platform announced Aug 10-11, 2026, jointly formed by Anthropic, Macquarie Asset Management, and GIC (Singapore's sovereign wealth fund). GIC and Macquarie own Theseus and fund the bulk of equity per project; Anthropic acts as long-term anchor tenant rather than owner, with an initial focus on US sites. No specific dollar commitment was disclosed for Theseus itself, distinct from Anthropic's separately-announced $50B data center spending plan.</div>
+            </div>
+
+            <div class="context-item">
+              <div class="context-term">GIC <span class="context-type">What</span></div>
+              <div class="context-note">Singapore's sovereign wealth fund, established 1981. Existing data center investor (Vantage EMEA, Equinix xScale, EdgeCore, a Brazilian JV with Alianza Investimentos) and a prior direct investor in Anthropic.</div>
+            </div>
+
+            <div class="context-item">
+              <div class="context-term">Macquarie Asset Management <span class="context-type">What</span></div>
+              <div class="context-note">Asset management arm of Macquarie Group; current data center investments include Netrality Data Centers, Applied Digital, and Virtus in Europe, having previously exited stakes in AirTrunk and Aligned.</div>
+            </div>
+            </div>
+      <div class="angle"><span class="angle-label">Investment angle:</span> This is a new, non-hyperscaler financing structure for Anthropic's compute buildout -- shifting data center ownership/equity risk onto GIC and Macquarie while Anthropic stays an asset-light anchor tenant. Combine with Nvidia's same-week $500B 'AI compute as investable asset class' financing-platform announcement (tracked separately) -- both point to a broader trend of specialized capital providers structurally entering AI infrastructure financing, which could ease capex-funding constraints across the sector but also introduces new counterparty/structuring risk to track (e.g. Anthropic's electricity-cost reimbursement obligation to GIC/Macquarie).</div>
+    </div>
+
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="day-header">2026-08-10</div>
+      <div class="day-entries">
+
+    <div class="entry-card" style="--accent:#3b6ea5">
+
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#3b6ea5">G</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Greg Brockman</span>
+          <span class="entry-handle">@gdb</span>
+          <span class="entry-platform">· X</span>
+          <span class="type-badge" style="background:#6b6b6b">X POST</span>
+
+        </div>
+      </div>
+      <div class="entry-text">We're releasing a new model (GPT-5.6-Cyber), and expanding Daybreak to help put frontier intelligence in defenders hands. [OpenAI: We're expanding our cybersecurity initiative Daybreak and introducing GPT-5.6-Cyber, a new model for advanced, authorized cybersecurity work. As the threat landscape evolves, we're putting frontier intelligence in the hands of trusted defenders before attackers can deploy it.]</div>
+      <div class="tags-row"><span class="tag tag-model">GPT-5.6-Cyber</span><span class="tag tag-platform">OpenAI</span><span class="tag tag-platform">Daybreak</span></div>
+      <div class="mentions-row">Mentioned: <span class="mention-chip">@OpenAI</span></div>
+
+        <div class="engagement-row">
+          <span class="eng-stat">💬 160</span>
+          <span class="eng-stat">🔁 194</span>
+          <span class="eng-stat">❤ 4K</span>
+          <span class="eng-stat">👁 349K</span>
+        </div>
+
+
+
+      <div class="context-box"><div class="context-label">Background</div>
+            <div class="context-item">
+              <div class="context-term">Daybreak / GPT-5.6-Cyber <span class="context-type">What's new</span></div>
+              <div class="context-note">OpenAI's cybersecurity initiative (Daybreak) and its newest specialized model (GPT-5.6-Cyber), announced Aug 10, 2026, aimed at advanced, authorized cybersecurity work such as exploit development and defensive tooling for vetted defenders -- OpenAI's direct answer to Anthropic's earlier Project Glasswing push into the same vertical.</div>
+            </div>
+            </div>
+      <div class="angle"><span class="angle-label">Investment angle:</span> OpenAI's cybersecurity push (GPT-5.6-Cyber + Daybreak) directly mirrors Anthropic's earlier Project Glasswing positioning (tracked in this journal) -- both frontier labs are now racing into enterprise cybersecurity as a distinct high-value vertical, which raises the competitive bar and may compress the differentiation Anthropic hoped to gain from Glasswing being first.</div>
+    </div>
+
+    <div class="entry-card" style="--accent:#3b6ea5">
+
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#3b6ea5">J</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Jensen Huang</span>
+          <span class="entry-handle">@nvidia</span>
+          <span class="entry-platform">· X</span>
+          <span class="type-badge" style="background:#6b6b6b">X POST</span>
+
+        </div>
+      </div>
+      <div class="entry-text">NVIDIA compute is a productive, investable asset. We're partnering with six of the world's leading long-term capital providers to establish independent financing platforms aimed at mobilizing over $500B of third-party capital -- helping customers access AI compute at scale. [Jensen Huang: NVIDIA AI Factory Compute Is Becoming an Investable Asset Class. Today, we announced partnerships with Apollo, BlackRock, Blackstone, Brookfield, Goldman Sachs and KKR to establish independent...]</div>
+      <div class="tags-row"><span class="tag tag-platform">Nvidia</span><span class="tag tag-platform">Apollo</span><span class="tag tag-platform">BlackRock</span><span class="tag tag-platform">Blackstone</span><span class="tag tag-platform">Brookfield</span><span class="tag tag-platform">Goldman Sachs</span><span class="tag tag-platform">KKR</span></div>
+
+
+        <div class="engagement-row">
+          <span class="eng-stat">💬 89</span>
+          <span class="eng-stat">🔁 200</span>
+          <span class="eng-stat">❤ 2.1K</span>
+          <span class="eng-stat">👁 258K</span>
+        </div>
+
+
+
+      <div class="context-box"><div class="context-label">Background</div>
+            <div class="context-item">
+              <div class="context-term">NVIDIA AI Factory financing platform <span class="context-type">What</span></div>
+              <div class="context-note">Announced Aug 10, 2026: Nvidia partnering with six long-term capital providers -- Apollo, BlackRock, Blackstone, Brookfield, Goldman Sachs, and KKR -- to establish independent financing platforms aimed at mobilizing over $500B of third-party capital for AI compute/datacenter access, explicitly framed by Nvidia as making 'AI Factory Compute' an investable asset class.</div>
+            </div>
+            </div>
+      <div class="angle"><span class="angle-label">Investment angle:</span> This is a significant structural announcement: Nvidia is explicitly positioning AI compute/datacenter capacity as a new institutional asset class, partnering with six major capital providers to mobilize $500B+ of third-party financing. This could materially expand the pool of capital available for AI datacenter buildout beyond hyperscaler balance sheets and AI-lab-direct deals (c.f. Anthropic's Theseus JV, tracked separately this run) -- worth watching for follow-on details on structure, returns, and which datacenter operators/REITs benefit.</div>
+    </div>
+
+    <div class="entry-card" style="--accent:#3b6ea5">
+
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#3b6ea5">S</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Sam Altman</span>
+          <span class="entry-handle">@sama</span>
+          <span class="entry-platform">· X</span>
+          <span class="type-badge" style="background:#6b6b6b">X POST</span>
+
+        </div>
+      </div>
+      <div class="entry-text">please consider using our models to help defend your systems [Eric Wallace: Today we are releasing GPT-5.6-Cyber. The model is our first large-scale attempt at directly improving capabilities for advanced cybersecurity tasks such as exploit development. We are finding it to be really quite strong for accelerating defensive work.]</div>
+      <div class="tags-row"><span class="tag tag-model">GPT-5.6-Cyber</span><span class="tag tag-platform">OpenAI</span></div>
+      <div class="mentions-row">Mentioned: <span class="mention-chip">@Eric Wallace <span class="mini-new">new</span></span></div>
+
+        <div class="engagement-row">
+          <span class="eng-stat">💬 740</span>
+          <span class="eng-stat">🔁 296</span>
+          <span class="eng-stat">❤ 8.3K</span>
+          <span class="eng-stat">👁 1.7M</span>
+        </div>
+
+
+
+      <div class="angle"><span class="angle-label">Investment angle:</span> Altman personally amplifying the GPT-5.6-Cyber/Daybreak cybersecurity launch (same announcement Brockman also promoted) underscores this as a genuine strategic priority for OpenAI, not a minor feature release -- reinforces the read that frontier labs are converging on cybersecurity as the next major enterprise vertical to compete over.</div>
+    </div>
+
+    <div class="entry-card" style="--accent:#b8860b">
+
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#b8860b">M</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Michael Burry</span>
+          <span class="entry-handle">@michaeljburry</span>
+          <span class="entry-platform">· X</span>
+          <span class="type-badge" style="background:#6b6b6b">X POST</span>
+
+        </div>
+      </div>
+      <div class="entry-text">DATA QUALITY FLAG -- not treated as a confirmed Burry post: the @michaeljburry account now displays under the name 'Cassandra Unchained', posting content about AI agents socializing with each other via Grok. Burry has a history of deleting/reactivating his X account; this could be a handle change, a new owner, or an impersonation. Content not included pending verification.</div>
+      <div class="tags-row"></div>
+
+
+
+
+      <div class="angle"><span class="angle-label">Investment angle:</span> Do not attribute the current content at this handle to Michael Burry until verified. Recommend confirming via a secondary source (e.g. Scion 13F filings, verified news coverage) before relying on this account.</div>
+    </div>
+
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="day-header">2026-08-09</div>
+      <div class="day-entries">
+
+    <div class="entry-card" style="--accent:#b8860b">
+
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#b8860b">C</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Cathie Wood</span>
+          <span class="entry-handle">@CathieDWood</span>
+          <span class="entry-platform">· X</span>
+          <span class="type-badge" style="background:#6b6b6b">X POST</span>
+
+        </div>
+      </div>
+      <div class="entry-text">US domestic profits before tax are hitting highs we haven't seen in many, many decades (13.2% of GDP)... what's holding it up now is different: companies leaning into AI and productivity gains to protect [margins]. [ARK Invest: Employment Friday jobs report... bigger economic story is unfolding underneath the headline.]</div>
+      <div class="tags-row"></div>
+      <div class="mentions-row">Mentioned: <span class="mention-chip">@ARKInvest</span></div>
+
+        <div class="engagement-row">
+          <span class="eng-stat">💬 44</span>
+          <span class="eng-stat">🔁 43</span>
+          <span class="eng-stat">❤ 450</span>
+          <span class="eng-stat">👁 131K</span>
+        </div>
+
+
+
+
+      <div class="angle"><span class="angle-label">Investment angle:</span> Wood is tying record corporate profit share of GDP directly to AI-driven productivity gains -- core to ARK's bull thesis. Useful macro data point (13.2% of GDP) to sanity-check against margin commentary from portfolio companies this earnings season.</div>
+    </div>
+
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="day-header">2026-08-08</div>
+      <div class="day-entries">
+
+    <div class="entry-card" style="--accent:#8e5a8e">
+
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#8e5a8e">A</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Allie K. Miller</span>
+          <span class="entry-handle">@alliekmiller</span>
+          <span class="entry-platform">· X</span>
+          <span class="type-badge" style="background:#6b6b6b">X POST</span>
+
+        </div>
+      </div>
+      <div class="entry-text">I use auto mode for everything and now that will be the default in Claude. Anthropic had to decide whether to prioritize maximization of human control or minimization of risk, and it chose the latter. [ClaudeDevs: Starting August 14, auto mode will be the default permission mode in Claude Code... caught 89% of dangerous commands. Manual approval caught 14%.]</div>
+      <div class="tags-row"><span class="tag tag-model">Claude Code</span><span class="tag tag-platform">Anthropic</span></div>
+      <div class="mentions-row">Mentioned: <span class="mention-chip">@Claude Devs (product account) <span class="mini-new">new</span></span></div>
+
+        <div class="engagement-row">
+          <span class="eng-stat">💬 19</span>
+          <span class="eng-stat">🔁 3</span>
+          <span class="eng-stat">❤ 58</span>
+          <span class="eng-stat">👁 13K</span>
+        </div>
+
+
+
+
+      <div class="angle"><span class="angle-label">Investment angle:</span> Anthropic making agentic coding more autonomous by default (auto mode, Aug 14) is a meaningful enterprise-adoption signal -- classifier catching 89% of dangerous commands vs 14% for manual review is a concrete safety/efficiency metric worth tracking for enterprise agentic-AI adoption curves.</div>
+    </div>
+
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="day-header">2026-08-07</div>
+      <div class="day-entries">
+
+    <div class="entry-card" style="--accent:#b8860b">
+
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#b8860b">G</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Gavin Baker</span>
+          <span class="entry-handle">@GavinSBaker</span>
+          <span class="entry-platform">· X</span>
+          <span class="type-badge" style="background:#6b6b6b">X POST</span>
+
+        </div>
+      </div>
+      <div class="entry-text">This is the way forward for the AI industry. [Quoting Vivek Ramaswamy's Ohio data center policy pledge on rising electric bills, noise, pollution, and community concerns tied to data center expansion.]</div>
+      <div class="tags-row"><span class="tag tag-platform">Datacenter / Power policy</span></div>
+      <div class="mentions-row">Mentioned: <span class="mention-chip">@Vivek Ramaswamy <span class="mini-new">new</span></span></div>
+
+        <div class="engagement-row">
+          <span class="eng-stat">💬 52</span>
+          <span class="eng-stat">🔁 53</span>
+          <span class="eng-stat">❤ 1.1K</span>
+          <span class="eng-stat">👁 238K</span>
+        </div>
+
+
+
+
+      <div class="angle"><span class="angle-label">Investment angle:</span> A leading AI/semi investor endorsing state-level 'Ohioans-first' data center policy signals growing investor attention to power-grid and local political constraints on AI infrastructure buildout -- a real second-order risk to hyperscaler capex timelines.</div>
+    </div>
+
+    <div class="entry-card" style="--accent:#c1622d">
+
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#c1622d">D</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Dylan Patel</span>
+          <span class="entry-handle">@dylan522p</span>
+          <span class="entry-platform">· X</span>
+          <span class="type-badge" style="background:#6b6b6b">X POST</span>
+
+        </div>
+      </div>
+      <div class="entry-text">Team just posted a note with the title "I can make your Bedrock" to discuss Amazon bedrock revenue mix to institutional clients. Incredible title</div>
+      <div class="tags-row"><span class="tag tag-platform">Amazon Bedrock</span><span class="tag tag-platform">AWS</span></div>
+
+
+        <div class="engagement-row">
+          <span class="eng-stat">💬 12</span>
+          <span class="eng-stat">🔁 6</span>
+          <span class="eng-stat">❤ 137</span>
+          <span class="eng-stat">👁 30K</span>
+        </div>
+
+
+
+
+      <div class="angle"><span class="angle-label">Investment angle:</span> SemiAnalysis digging into AWS Bedrock revenue composition is directly relevant to assessing Amazon's AI monetization progress relative to Azure/OpenAI and Google Cloud/Gemini -- worth requesting the full note if Denise has SemiAnalysis institutional access.</div>
+    </div>
+
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="day-header">2026-08-06</div>
+      <div class="day-entries">
+
+    <div class="entry-card" style="--accent:#3b6ea5">
+
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#3b6ea5">S</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Sam Altman</span>
+          <span class="entry-handle">@sama</span>
+          <span class="entry-platform">· X</span>
+          <span class="type-badge" style="background:#6b6b6b">X POST</span>
+
+        </div>
+      </div>
+      <div class="entry-text">5.6 Sol much better in chat now and unlimited text chat for free users! [quoting OpenAI: GPT-5.6 Sol now powers both Instant and deep reasoning for Plus &amp; Pro users, delivering more factual, focused responses. Free &amp; Go users get unlimited text chats with GPT-5.6 Luna starting tomorrow.]</div>
+      <div class="tags-row"><span class="tag tag-model">GPT-5.6 Sol</span><span class="tag tag-model">GPT-5.6 Luna</span><span class="tag tag-platform">OpenAI</span><span class="tag tag-platform">ChatGPT</span></div>
+      <div class="mentions-row">Mentioned: <span class="mention-chip">@OpenAI</span></div>
+
+        <div class="engagement-row">
+          <span class="eng-stat">💬 839</span>
+          <span class="eng-stat">🔁 427</span>
+          <span class="eng-stat">❤ 9.8K</span>
+          <span class="eng-stat">👁 1.1M</span>
+        </div>
+
+
+
+
+      <div class="angle"><span class="angle-label">Investment angle:</span> OpenAI is widening free-tier access and upgrading default reasoning quality -- an engagement/retention play likely aimed at competitive pressure from Gemini and Claude free tiers; watch for conversion-to-paid impact on OpenAI's revenue mix.</div>
+    </div>
+
+    <div class="entry-card" style="--accent:#3b6ea5">
+
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#3b6ea5">J</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Jensen Huang</span>
+          <span class="entry-handle">@nvidia</span>
+          <span class="entry-platform">· X</span>
+          <span class="type-badge" style="background:#6b6b6b">X POST</span>
+
+        </div>
+      </div>
+      <div class="entry-text">Vera Rubin NVL72 Compute Tray. Designed to scale. Assembled in 1 minute. 100% automated. No cables, no hoses, no fans. A revolutionary new design that means faster ramp and faster time to revenue.</div>
+      <div class="tags-row"><span class="tag tag-platform">Nvidia</span><span class="tag tag-platform">Vera Rubin NVL72</span><span class="tag tag-platform">MGX rack</span><span class="tag tag-platform">ConnectX-9</span></div>
+      <div class="mentions-row">Mentioned: <span class="mention-chip">@NVIDIAAIInfra</span></div>
+
+        <div class="engagement-row">
+          <span class="eng-stat">💬 91</span>
+          <span class="eng-stat">🔁 265</span>
+          <span class="eng-stat">❤ 2.3K</span>
+          <span class="eng-stat">👁 177K</span>
+        </div>
+
+
+
+      <div class="context-box"><div class="context-label">Background</div>
+            <div class="context-item">
+              <div class="context-term">Vera Rubin NVL72 <span class="context-type">What's new</span></div>
+              <div class="context-note">Nvidia's next-gen AI supercomputer platform, successor to Blackwell, shipping H2 2026. Rack-scale system pairing 72 new 'Rubin' GPUs with 36 'Vera' CPUs (Vera replaces Grace). Nvidia claims ~5x inference performance and ~10x lower cost per token vs. Blackwell at the rack level. Each Rubin GPU carries 288GB of HBM4 memory at 22 TB/s bandwidth, linked via NVLink 6 (3.6 TB/s per GPU, 2x the prior generation). The 'extreme co-design' spans six chip types, including a new ConnectX-9 SuperNIC and BlueField-4 DPU. First deployments expected from AWS, Google Cloud, Microsoft, OCI, and CoreWeave in H2 2026.</div>
+            </div>
+            </div>
+      <div class="angle"><span class="angle-label">Investment angle:</span> Nvidia emphasizing manufacturing/assembly speed (1-minute automated tray assembly) directly targets faster datacenter deployment cycles -- a concrete lever for pulling forward revenue recognition on next-gen Vera Rubin racks.</div>
+    </div>
+
+    <div class="entry-card" style="--accent:#4a8f5c">
+
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#4a8f5c">A</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Aravind Srinivas</span>
+          <span class="entry-handle">@AravSrinivas</span>
+          <span class="entry-platform">· X</span>
+          <span class="type-badge" style="background:#6b6b6b">X POST</span>
+
+        </div>
+      </div>
+      <div class="entry-text">Perplexity Computer's goal is to provide the maximum intelligence for minimum cost with multi model orchestration. We've tested GPT 5.6 Terra extensively and found it to be a pretty good model: capable and cost-effective... making it the default for all [Computer subagents].</div>
+      <div class="tags-row"><span class="tag tag-model">GPT 5.6 Terra</span><span class="tag tag-model">GPT 5.6 Luna</span><span class="tag tag-platform">Perplexity</span><span class="tag tag-platform">OpenAI</span></div>
+      <div class="mentions-row">Mentioned: <span class="mention-chip">@perplexity_ai</span></div>
+
+        <div class="engagement-row">
+          <span class="eng-stat">💬 49</span>
+          <span class="eng-stat">🔁 27</span>
+          <span class="eng-stat">❤ 312</span>
+          <span class="eng-stat">👁 48K</span>
+        </div>
+
+
+
+
+      <div class="angle"><span class="angle-label">Investment angle:</span> Perplexity is explicitly multi-model rather than betting on a single foundation model provider -- reduces single-vendor dependency risk and signals continued strong OpenAI model traction as a default choice among AI-native app builders.</div>
+    </div>
+
+    <div class="entry-card" style="--accent:#b8860b">
+
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#b8860b">B</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Bill Gurley</span>
+          <span class="entry-handle">@bgurley</span>
+          <span class="entry-platform">· X</span>
+          <span class="type-badge" style="background:#6b6b6b">X POST</span>
+
+        </div>
+      </div>
+      <div class="entry-text">I disagree, I don't think this has to be "game-over" for Google. I do think they have only one play left now - to pull from their own Android/Kubernetes playbook and fully embrace open-models. It's the obvious move in this situation. [Replying to tae kim: Jeff Dean and Demis Hassabis are the two most important AI executives at Google. Jeff is leaving and Demis is stepping down from day-to-day operational leadership at DeepMind. Game over.]</div>
+      <div class="tags-row"><span class="tag tag-platform">Google</span><span class="tag tag-platform">Android</span><span class="tag tag-platform">Kubernetes</span></div>
+      <div class="mentions-row">Mentioned: <span class="mention-chip">@tae kim <span class="mini-new">new</span></span></div>
+
+        <div class="engagement-row">
+          <span class="eng-stat">💬 2</span>
+          <span class="eng-stat">🔁 82</span>
+          <span class="eng-stat">❤ 1.3K</span>
+          <span class="eng-stat">👁 361K</span>
+        </div>
+
+
+
+        <div class="article-card">
+          <div class="article-label">Linked article</div>
+          <a href="https://www.cnbc.com/2026/08/05/google-chief-scientist-jeff-dean-leaving-company-after-27-years.html" target="_blank" class="article-link">https://www.cnbc.com/2026/08/05/google-chief-scientist-jeff-dean-leaving-company-after-27-years.html</a>
+          <div class="article-summary">Confirmed by CNBC, Axios, and 9to5Google (Aug 5, 2026): Google chief scientist Jeff Dean is leaving after 27 years to co-found Discovery Loop, an independent AI research company with Google as investor and cloud provider. Separately, Demis Hassabis is stepping down as Google DeepMind CEO to become Chairman and Chief Scientist of parent company Alphabet, while continuing to lead Isomorphic Labs. Koray Kavukcuoglu, DeepMind's CTO, is elevated to SVP and takes charge of Gemini model development.</div>
+        </div>
+
+      <div class="context-box"><div class="context-label">Background</div>
+            <div class="context-item">
+              <div class="context-term">Jeff Dean <span class="context-type">Who</span></div>
+              <div class="context-note">Google's (now former) Chief Scientist and a 27-year Google veteran. Credited with foundational infrastructure work (MapReduce, BigTable, TensorFlow) and previously led Google Brain and Google AI before the 2023 merger into Google DeepMind. Confirmed Aug 5, 2026: departing to co-found Discovery Loop, an independent AI research company with Google as investor and cloud provider, alongside longtime collaborator Sanjay Ghemawat.</div>
+            </div>
+
+            <div class="context-item">
+              <div class="context-term">DeepMind leadership <span class="context-type">What</span></div>
+              <div class="context-note">Refers to the executive team running Google DeepMind, the AI research unit formed in 2023 from the merger of DeepMind and Google Brain. As of Aug 5, 2026: Demis Hassabis is stepping down as DeepMind CEO to become Chairman and Chief Scientist of parent company Alphabet (while continuing to lead Isomorphic Labs, Alphabet's AI drug-discovery spinoff). Koray Kavukcuoglu, DeepMind's CTO, is elevated to SVP and takes over Gemini model development.</div>
+            </div>
+            </div>
+      <div class="angle"><span class="angle-label">Investment angle:</span> This is a confirmed, not rumored, leadership shakeup -- corroborated by multiple outlets. Two threads matter for coverage: (1) Gemini model development continuity now sits with Kavukcuoglu rather than Hassabis day-to-day, worth watching for any roadmap disruption; (2) Discovery Loop is a new, Google-backed AI research entrant led by two of Google's most credentialed infrastructure engineers -- a potential future partner, acquisition target, or competitor depending on its focus area. Gurley's read (Google's best remaining play is to fully embrace open models) is his own opinion, not confirmed Google strategy.</div>
+    </div>
+
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="day-header">2026-08-05</div>
+      <div class="day-entries">
+
+    <div class="entry-card" style="--accent:#6b6b6b">
+
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#6b6b6b">R</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Rowan Cheung</span>
+          <span class="entry-handle">@rowancheung</span>
+          <span class="entry-platform">· X</span>
+          <span class="type-badge" style="background:#6b6b6b">X POST</span>
+
+        </div>
+      </div>
+      <div class="entry-text">Blown away by the response to the Community AI Workflow Hub... A 65-year-old retiree finding workflows that apply to his life.</div>
+      <div class="tags-row"></div>
+
+
+        <div class="engagement-row">
+          <span class="eng-stat">💬 30</span>
+          <span class="eng-stat">🔁 13</span>
+          <span class="eng-stat">❤ 49</span>
+          <span class="eng-stat">👁 26K</span>
+        </div>
+
+
+
+
+      <div class="angle"><span class="angle-label">Investment angle:</span> Anecdotal but directionally useful as a grassroots-adoption signal -- consumer AI workflow usage spreading beyond typical early-adopter demographics.</div>
+    </div>
+
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="day-header">2026-08-04</div>
+      <div class="day-entries">
+
+    <div class="entry-card" style="--accent:#b8860b">
+
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#b8860b">K</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Kai-Fu Lee</span>
+          <span class="entry-handle">@kaifulee</span>
+          <span class="entry-platform">· X</span>
+          <span class="type-badge" style="background:#6b6b6b">X POST</span>
+
+        </div>
+      </div>
+      <div class="entry-text">My editor @CrownPublishing asked: "Why do you want to publish this book so quickly?" My answer: Because watching executives pour millions into the wrong approach to AI transformation kills me. There's no time to waste. AI transformation is happening now.</div>
+      <div class="tags-row"></div>
+      <div class="mentions-row">Mentioned: <span class="mention-chip">@CrownPublishing</span></div>
+
+        <div class="engagement-row">
+          <span class="eng-stat">💬 16</span>
+          <span class="eng-stat">🔁 40</span>
+          <span class="eng-stat">❤ 154</span>
+          <span class="eng-stat">👁 44K</span>
+        </div>
+
+
+
+
+      <div class="angle"><span class="angle-label">Investment angle:</span> Promoting his new book 'AI Native: The Mandate to Transform Your Company' -- lower direct market signal, but Lee's framing of common enterprise AI-transformation missteps is a useful lens for evaluating portfolio companies' AI adoption narratives.</div>
+    </div>
+
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="day-header">2026-08-03</div>
+      <div class="day-entries">
+
+    <div class="entry-card" style="--accent:#b8860b">
+
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#b8860b">M</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Marc Andreessen</span>
+          <span class="entry-handle">@pmarca</span>
+          <span class="entry-platform">· X</span>
+          <span class="type-badge" style="background:#6b6b6b">X POST</span>
+
+        </div>
+      </div>
+      <div class="entry-text">Congress has a generational opportunity to pass policy that will keep the US the global leader in both technology and finance. Pass CLARITY.</div>
+      <div class="tags-row"><span class="tag tag-platform">Crypto / market structure policy</span></div>
+      <div class="mentions-row">Mentioned: <span class="mention-chip">@a16zcrypto</span></div>
+
+        <div class="engagement-row">
+          <span class="eng-stat">💬 81</span>
+          <span class="eng-stat">🔁 95</span>
+          <span class="eng-stat">❤ 685</span>
+          <span class="eng-stat">👁 202K</span>
+        </div>
+
+
+
+
+      <div class="angle"><span class="angle-label">Investment angle:</span> Crypto/fintech policy rather than AI directly, but relevant as a16z's public policy lobbying priority -- a signal of where a major AI-adjacent VC is spending political capital this cycle.</div>
+    </div>
+
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="day-header">2026-07-30</div>
+      <div class="day-entries">
+
+    <div class="entry-card" style="--accent:#3b6ea5">
+
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#3b6ea5">D</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Dario Amodei</span>
+          <span class="entry-handle">@DarioAmodei</span>
+          <span class="entry-platform">· WSJ</span>
+          <span class="type-badge" style="background:#a3661f">ARTICLE</span>
+          <span class="entry-author">by Angel Au-Yeung, Tina Li, Amrith Ramkumar</span>
+        </div>
+      </div>
+      <div class="entry-text">WSJ (full text, now unlocked): "A Backlash Against Anthropic Is Brewing in Silicon Valley." Beyond the Claude Design/Figma friction, Anthropic was one of the only major AI companies to NOT sign a 70+ company open letter (backed by Nvidia, Microsoft, OpenAI, and Google) supporting open-weight models -- while separately disclosing plans for a possible public listing (IPO) as soon as fall 2026.</div>
+      <div class="tags-row"><span class="tag tag-model">Claude Design</span><span class="tag tag-platform">Anthropic</span><span class="tag tag-platform">Figma</span></div>
+      <div class="mentions-row">Mentioned: <span class="mention-chip">@Daniela Amodei <span class="mini-new">new</span></span></div>
+
+
+        <div class="article-card">
+          <div class="article-label">Linked article</div>
+          <a href="https://www.wsj.com/tech/ai/a-backlash-against-anthropic-is-brewing-in-silicon-valley-3b3ddc80" target="_blank" class="article-link">https://www.wsj.com/tech/ai/a-backlash-against-anthropic-is-brewing-in-silicon-valley-3b3ddc80</a>
+          <div class="article-summary">Full-text update: Figma CEO Dylan Field said Anthropic hadn't been 'consistently candid' after the Claude Design launch. Separately, Anthropic's June release of Fable 5 (a safety-constrained version of its Mythos model) drew criticism for silently degrading answers to some AI-development questions without disclosure -- Anthropic apologized and made the restrictions visible, but kept the underlying refusal policy. Fable 5 also doesn't support zero-data-retention, keeping user data 30 days, which upset customers in sensitive industries. Critics (a Columbia professor, a rival startup CEO) accused Anthropic of using safety rhetoric to gain regulatory advantage over open-weight competitors, and of hypocrisy given its own models were trained on scraped internet data. Most notably for valuation purposes: the piece reports Anthropic is planning a public listing as soon as fall 2026.</div>
+        </div>
+
+      <div class="context-box"><div class="context-label">Background</div>
+            <div class="context-item">
+              <div class="context-term">Claude Design <span class="context-type">What's new</span></div>
+              <div class="context-note">Anthropic product launched April 2026 that competes directly with design-software partner Figma; cited as the trigger for Silicon Valley's trust breakdown with Anthropic.</div>
+            </div>
+
+            <div class="context-item">
+              <div class="context-term">Fable 5 / Mythos <span class="context-type">What's new</span></div>
+              <div class="context-note">Fable 5 (released June 2026) is Anthropic's safety-constrained public version of its more capable Mythos model. It initially degraded answers to some AI-research questions without disclosing the restriction (later made visible after backlash), and doesn't support zero-data-retention -- it keeps user data 30 days.</div>
+            </div>
+
+            <div class="context-item">
+              <div class="context-term">Dylan Field <span class="context-type">Who</span></div>
+              <div class="context-note">CEO of Figma, an Anthropic partner whose product category (design tools) Claude Design now competes with. Publicly criticized Anthropic's communication around the launch.</div>
+            </div>
+
+            <div class="context-item">
+              <div class="context-term">planned public listing <span class="context-type">What</span></div>
+              <div class="context-note">WSJ reports Anthropic is planning to go public (IPO) as soon as fall 2026 -- a first public signal of listing timing worth verifying and tracking closely.</div>
+            </div>
+            </div>
+      <div class="angle"><span class="angle-label">Investment angle:</span> The IPO timing detail (fall 2026) is the single most decision-relevant fact in this piece -- worth confirming through primary sources/banker channels given WSJ's own sourcing is 'people familiar with the matter.' Separately, the open-weights letter non-signature and the Fable 5 data-retention backlash both point to Anthropic increasingly diverging from platform-partner norms just as it needs developer/enterprise goodwill ahead of a potential listing -- a reputational risk to watch into any roadshow period.</div>
+    </div>
+
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="day-header">2026-07-28</div>
+      <div class="day-entries">
+
+    <div class="entry-card" style="--accent:#3b6ea5">
+
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#3b6ea5">S</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Satya Nadella</span>
+          <span class="entry-handle">@satyanadella</span>
+          <span class="entry-platform">· X</span>
+          <span class="type-badge" style="background:#6b6b6b">X POST</span>
+
+        </div>
+      </div>
+      <div class="entry-text">A good read from Mark. Establishing a frontier ecosystem that empowers people and orgs everywhere is what we collectively need to build together. [Quoting Mark Zuckerberg: I wrote about why we believe the future is for everyone. More coming about a positive vision for a world with superintelligence soon.]</div>
+      <div class="tags-row"><span class="tag tag-platform">Meta</span></div>
+      <div class="mentions-row">Mentioned: <span class="mention-chip">@Mark Zuckerberg <span class="mini-new">new</span></span></div>
+
+        <div class="engagement-row">
+          <span class="eng-stat">💬 302</span>
+          <span class="eng-stat">🔁 449</span>
+          <span class="eng-stat">❤ 6.9K</span>
+          <span class="eng-stat">👁 834K</span>
+        </div>
+
+
+
+
+      <div class="angle"><span class="angle-label">Investment angle:</span> Microsoft's CEO publicly endorsing Meta's 'superintelligence for everyone' framing is a notable cross-lab alignment signal, relevant to how the major platforms are positioning competitively vs. OpenAI/Anthropic on open ecosystem messaging.</div>
+    </div>
+
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="day-header">2026-07-25</div>
+      <div class="day-entries">
+
+    <div class="entry-card" style="--accent:#3b6ea5">
+
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#3b6ea5">D</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Demis Hassabis</span>
+          <span class="entry-handle">@demishassabis</span>
+          <span class="entry-platform">· X</span>
+          <span class="type-badge" style="background:#6b6b6b">X POST</span>
+
+        </div>
+      </div>
+      <div class="entry-text">A strong and secure open ecosystem is important for the world to benefit from AI... Gemma open models which have now been downloaded 300M+ times. [Quoting Jensen Huang: sharing a letter @nvidia signed on why open models matter.]</div>
+      <div class="tags-row"><span class="tag tag-model">Gemma</span><span class="tag tag-platform">Google DeepMind</span><span class="tag tag-platform">Nvidia</span><span class="tag tag-platform">Jax</span><span class="tag tag-platform">Transformers</span></div>
+      <div class="mentions-row">Mentioned: <span class="mention-chip">@JensenHuang</span></div>
+
+        <div class="engagement-row">
+          <span class="eng-stat">💬 260</span>
+          <span class="eng-stat">🔁 788</span>
+          <span class="eng-stat">❤ 7.5K</span>
+          <span class="eng-stat">👁 1.1M</span>
+        </div>
+
+
+
+      <div class="context-box"><div class="context-label">Background</div>
+            <div class="context-item">
+              <div class="context-term">Gemma <span class="context-type">What's new</span></div>
+              <div class="context-note">Google DeepMind's family of open-weight models (downloadable and runnable outside Google's own infrastructure), distinct from the proprietary Gemini line. Cited here at 300M+ cumulative downloads, underscoring Google's dual-track strategy of open models alongside closed Gemini.</div>
+            </div>
+            </div>
+      <div class="angle"><span class="angle-label">Investment angle:</span> Google reaffirming commitment to open-weight models (Gemma) alongside proprietary Gemini, co-signed with Nvidia -- signals continued two-track strategy competing with Meta's open models and OpenAI's closed approach.</div>
+    </div>
+
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="day-header">2026-07-06</div>
+      <div class="day-entries">
+
+    <div class="entry-card" style="--accent:#3b6ea5">
+
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#3b6ea5">S</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Sam Altman</span>
+          <span class="entry-handle">@sama</span>
+          <span class="entry-platform">· WSJ</span>
+          <span class="type-badge" style="background:#a3661f">ARTICLE</span>
+          <span class="entry-author">by Katherine Bindley</span>
+        </div>
+      </div>
+      <div class="entry-text">WSJ (full text, now unlocked): "Big Tech Warned About AI-Driven Job Losses. Now Leaders Say Workers Will Flourish." An EY-Parthenon survey found the share of CEOs expecting significant AI-driven headcount cuts fell from 46% (Jan 2025) to 20% (May 2026) -- even as Meta cut 8,000 jobs in May and Amazon cut 16,000, both while touting AI's job-creating potential.</div>
+      <div class="tags-row"></div>
+
+
+
+        <div class="article-card">
+          <div class="article-label">Linked article</div>
+          <a href="https://www.wsj.com/tech/ai/ai-workers-tech-ceos-job-losses-afc71e15" target="_blank" class="article-link">https://www.wsj.com/tech/ai/ai-workers-tech-ceos-job-losses-afc71e15</a>
+          <div class="article-summary">Full-text update: Altman and Amodei both softened prior doom-laden predictions (Amodei had warned AI could eliminate half of entry-level jobs in May 2025; by June 2026 he stressed he wasn't trying to be a 'prophet of doom,' while still flagging 'enduring job loss' as possible). A Ramp/Revelio Labs study found companies with the largest AI investments grew employment ~10% more than peers who hadn't adopted AI -- a data point cutting against the doom narrative. Ford CEO Jim Farley, who predicted AI would replace 'literally half' of white-collar workers, has since hired several hundred engineers specifically because AI-automated work needed human quality correction. Public opinion remains split along political lines: ~30% of Democrats vs. ~50% of Republicans vs. 77% of tech founders favor accelerating AI as fast as possible.</div>
+        </div>
+
+      <div class="context-box"><div class="context-label">Background</div>
+            <div class="context-item">
+              <div class="context-term">EY-Parthenon survey <span class="context-type">What</span></div>
+              <div class="context-note">Consulting-firm survey of CEOs cited in this piece tracking sentiment on AI-driven headcount reduction; showed a drop from 46% (Jan 2025) expecting significant cuts to 20% (May 2026).</div>
+            </div>
+
+            <div class="context-item">
+              <div class="context-term">Jim Farley <span class="context-type">Who</span></div>
+              <div class="context-note">CEO of Ford Motor Company. Predicted last year that AI would replace 'literally half' of white-collar workers, but Ford has since hired several hundred engineers to address quality issues in AI-automated work.</div>
+            </div>
+            </div>
+      <div class="angle"><span class="angle-label">Investment angle:</span> The Ramp/Revelio Labs finding (heavy AI adopters growing headcount ~10% faster than peers) is a concrete, checkable data point worth requesting directly -- more useful for modeling labor-cost impact than CEO rhetoric either direction. The Ford example is a useful cautionary case study: aggressive AI-driven automation followed by re-hiring for quality control suggests productivity gains may be less linear than headline capex/AI-adoption stories imply.</div>
+    </div>
+
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="day-header">2026-06-09</div>
+      <div class="day-entries">
+
+    <div class="entry-card" style="--accent:#4a8f5c">
+
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#4a8f5c">A</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Andrej Karpathy</span>
+          <span class="entry-handle">@karpathy</span>
+          <span class="entry-platform">· X</span>
+          <span class="type-badge" style="background:#6b6b6b">X POST</span>
+
+        </div>
+      </div>
+      <div class="entry-text">This is a super exciting release - Claude Fable 5 is the same underlying model as Mythos but with added safeguards. The benchmarks are great and it's SOTA on everything by a margin but I'll add that qualitatively also, this is a major-version-bump-deserving step change forward.</div>
+      <div class="tags-row"><span class="tag tag-model">Claude Fable 5</span><span class="tag tag-platform">Anthropic / Claude</span></div>
+      <div class="mentions-row">Mentioned: <span class="mention-chip">@claudeai</span></div>
+
+        <div class="engagement-row">
+          <span class="eng-stat">💬 1.3K</span>
+          <span class="eng-stat">🔁 2.4K</span>
+          <span class="eng-stat">❤ 26K</span>
+          <span class="eng-stat">👁 3M</span>
+        </div>
+
+
+
+
+      <div class="angle"><span class="angle-label">Investment angle:</span> Independent, credible validation (ex-OpenAI, well-regarded technically) of a frontier-model quality jump reinforces the narrative of continued capability leapfrogging among top labs -- relevant to relative positioning between OpenAI, Anthropic, and Google.</div>
+    </div>
+
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="day-header">2026-04-07</div>
+      <div class="day-entries">
+
+    <div class="entry-card" style="--accent:#3b6ea5">
+
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#3b6ea5">D</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Dario Amodei</span>
+          <span class="entry-handle">@DarioAmodei</span>
+          <span class="entry-platform">· X</span>
+          <span class="type-badge" style="background:#6b6b6b">X POST</span>
+
+        </div>
+      </div>
+      <div class="entry-text">I'm proud that so many of the world's leading companies have joined us for Project Glasswing to confront the cyber threat posed by increasingly capable AI systems head-on. [Anthropic: Project Glasswing is powered by our newest frontier model, Claude Mythos Preview, which can find software vulnerabilities better than all but the most skilled humans.]</div>
+      <div class="tags-row"><span class="tag tag-model">Claude Mythos Preview</span><span class="tag tag-platform">Anthropic</span></div>
+      <div class="mentions-row">Mentioned: <span class="mention-chip">@AnthropicAI</span></div>
+
+        <div class="engagement-row">
+          <span class="eng-stat">💬 667</span>
+          <span class="eng-stat">🔁 680</span>
+          <span class="eng-stat">❤ 12K</span>
+          <span class="eng-stat">👁 1.1M</span>
+        </div>
+
+
+
+        <div class="article-card">
+          <div class="article-label">Linked article</div>
+          <a href="https://anthropic.com/glasswing" target="_blank" class="article-link">https://anthropic.com/glasswing</a>
+          <div class="article-summary"></div>
+        </div>
+
+      <div class="context-box"><div class="context-label">Background</div>
+            <div class="context-item">
+              <div class="context-term">Claude Mythos Preview <span class="context-type">What's new</span></div>
+              <div class="context-note">The Anthropic frontier model referenced as powering Project Glasswing's vulnerability-finding capability. Per Anthropic's own framing in this post, it can find software vulnerabilities better than all but the most skilled human researchers -- positioned for high-stakes enterprise/security use cases rather than general chat.</div>
+            </div>
+            </div>
+      <div class="angle"><span class="angle-label">Investment angle:</span> Anthropic is positioning Claude for enterprise cybersecurity workflows (vulnerability discovery), a high-value vertical that could open a distinct enterprise revenue line separate from general-purpose chat competition with OpenAI/Google.</div>
+    </div>
+
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="day-header">2026-04-04</div>
+      <div class="day-entries">
+
+    <div class="entry-card" style="--accent:#b8860b">
+
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#b8860b">M</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Michael Saylor</span>
+          <span class="entry-handle">@saylor</span>
+          <span class="entry-platform">· X</span>
+          <span class="type-badge" style="background:#6b6b6b">X POST</span>
+
+        </div>
+      </div>
+      <div class="entry-text">Bitcoin has won. Global consensus is that $BTC is digital capital. The four-year cycle is dead. Price is now driven by capital flows. Bank and digital credit will determine Bitcoin's growth trajectory.</div>
+      <div class="tags-row"><span class="tag tag-platform">Bitcoin</span></div>
+
+
+        <div class="engagement-row">
+          <span class="eng-stat">💬 4.3K</span>
+          <span class="eng-stat">🔁 4.4K</span>
+          <span class="eng-stat">❤ 31K</span>
+          <span class="eng-stat">👁 5M</span>
+        </div>
+      <div class="engagement-flag">⚠ Unusual engagement — Unusually high reply volume: 4.3K replies is the highest absolute reply count of any tracked post this period (3.3x the next-highest, Karpathy's 1.3K on a comparable-or-larger view count), and top replies show active public pushback rather than pure agreement -- a signal of genuine controversy/debate rather than just reach.</div>
+        <div class="replies-box"><div class="replies-label">Top replies</div>
+                <div class="reply-item">
+                  <div class="reply-head"><span class="reply-author">hodlonaut #BIP-110</span> <span class="reply-handle">@hodlonaut</span></div>
+                  <div class="reply-text">What do you think of the state of Bitcoin Core governance and funding, Michael? Bitcoin doesn't win if it is diluted into a new Ethereum.</div>
+                  <div class="reply-stats">❤ 462 · 🔁 70 · 💬 25</div>
+                </div>
+
+                <div class="reply-item">
+                  <div class="reply-head"><span class="reply-author">Bob Loukas</span> <span class="reply-handle">@BobLoukas</span></div>
+                  <div class="reply-text">Your stock is down 75% but yeah the cycle is dead.</div>
+                  <div class="reply-stats">❤ 394 · 🔁 10 · 💬 23</div>
+                </div>
+
+                <div class="reply-item">
+                  <div class="reply-head"><span class="reply-author">Peter Schiff</span> <span class="reply-handle">@PeterSchiff</span></div>
+                  <div class="reply-text">The consensus exists only in your head. But I agree with you that capital flows will drive the price. As capital flows out of Bitcoin the price will be driven lower.</div>
+                  <div class="reply-stats">❤ 385 · 🔁 14 · 💬 51</div>
+                </div>
+                </div>
+
+
+      <div class="angle"><span class="angle-label">Investment angle:</span> Not AI-specific -- this is Saylor's pinned bitcoin-as-digital-capital thesis. Included for completeness since he's tracked as an AI-infrastructure-capex-adjacent investor voice; no direct AI read-through in this post.</div>
+    </div>
+
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="day-header">2026-03-28</div>
+      <div class="day-entries">
+
+    <div class="entry-card" style="--accent:#3b6ea5">
+
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#3b6ea5">S</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Sam Altman</span>
+          <span class="entry-handle">@sama</span>
+          <span class="entry-platform">· WSJ</span>
+          <span class="type-badge" style="background:#a3661f">ARTICLE</span>
+          <span class="entry-author">by Keach Hagey, Berber Jin</span>
+        </div>
+      </div>
+      <div class="entry-text">WSJ: "The Decadelong Feud Shaping the Future of AI." An investigation into a decade-long personal rivalry between the founders of OpenAI and Anthropic, based on interviews with current and former employees at both companies. (Paywalled beyond the lede.)</div>
+      <div class="tags-row"><span class="tag tag-platform">OpenAI</span><span class="tag tag-platform">Anthropic</span></div>
+
+
+
+        <div class="article-card">
+          <div class="article-label">Linked article</div>
+          <a href="https://www.wsj.com/tech/ai/the-decadelong-feud-shaping-the-future-of-ai-7075acde" target="_blank" class="article-link">https://www.wsj.com/tech/ai/the-decadelong-feud-shaping-the-future-of-ai-7075acde</a>
+          <div class="article-summary">Frames much of the ongoing OpenAI-Anthropic rivalry -- product releases, policy positioning, competitive tactics -- as rooted partly in personal history and past power struggles between the two labs' leadership, not purely strategic calculation.</div>
+        </div>
+
+      <div class="angle"><span class="angle-label">Investment angle:</span> Useful background context for interpreting other entries in this journal involving OpenAI/Anthropic competitive moves: some of what reads as pure strategy may be shaped by this personal history. Not a standalone trade signal.</div>
+    </div>
+
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="day-header">2026-03-03</div>
+      <div class="day-entries">
+
+    <div class="entry-card" style="--accent:#3b6ea5">
+
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#3b6ea5">D</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Dario Amodei</span>
+          <span class="entry-handle">@DarioAmodei</span>
+          <span class="entry-platform">· WSJ</span>
+          <span class="type-badge" style="background:#a3661f">ARTICLE</span>
+          <span class="entry-author">by Amrith Ramkumar, Keach Hagey, Marcus Weisgerber</span>
+        </div>
+      </div>
+      <div class="entry-text">WSJ (full text, now unlocked): "A 'Fight About Vibes' Drove the Pentagon's Breakup with Anthropic." At their Feb 24 meeting, Defense Secretary Hegseth cut off Amodei mid-sentence: "No CEO is going to tell our war fighters what they can and cannot do." Talks collapsed by a Friday 5:01pm deadline; Trump then directed all federal agencies to stop working with Anthropic, and Hegseth formally designated it a 'supply-chain risk' -- a rarely used designation against a U.S. company.</div>
+      <div class="tags-row"><span class="tag tag-platform">Pentagon / DoD</span><span class="tag tag-platform">Anthropic</span></div>
+      <div class="mentions-row">Mentioned: <span class="mention-chip">@Pete Hegseth <span class="mini-new">new</span></span><span class="mention-chip">@Emil Michael <span class="mini-new">new</span></span></div>
+
+
+        <div class="article-card">
+          <div class="article-label">Linked article</div>
+          <a href="https://www.wsj.com/tech/ai/anthropic-amodei-hegseth-ai-c12ee0df" target="_blank" class="article-link">https://www.wsj.com/tech/ai/anthropic-amodei-hegseth-ai-c12ee0df</a>
+          <div class="article-summary">Full-text update: the dispute centers on Anthropic's refusal to drop 'red lines' banning Claude's use for mass domestic surveillance and autonomous weapons; the Pentagon wanted blanket approval for all lawful use cases. The designation, if it survives Anthropic's expected legal challenge, could impair its ability to work with contractors including Lockheed Martin, Amazon and Microsoft. As the standoff escalated, both OpenAI and xAI (Grok) secured approval for classified government systems -- ground Anthropic had held alone until now. WSJ also reports Claude models were involved in planning the Iran strikes and the January raid that captured Venezuelan President Nicolas Maduro, and were used for Pentagon war-gaming/mission planning. Despite -- or because of -- the standoff, Claude topped ChatGPT to become the most-downloaded app in Apple's App Store by the following Sunday. Anthropic is valued at $380B after its most recent raise and had a ~$200M Pentagon contract as of July.</div>
+        </div>
+
+      <div class="context-box"><div class="context-label">Background</div>
+            <div class="context-item">
+              <div class="context-term">Pete Hegseth <span class="context-type">Who</span></div>
+              <div class="context-note">U.S. Secretary of Defense (also oversaw renaming the Defense Department to the Department of War). Cut Amodei off mid-sentence at their Feb 24 meeting and issued the supply-chain-risk designation against Anthropic.</div>
+            </div>
+
+            <div class="context-item">
+              <div class="context-term">Emil Michael <span class="context-type">Who</span></div>
+              <div class="context-note">Undersecretary of Defense for Research and Engineering; former Uber chief business officer with a long relationship with Sam Altman (helped him sell his first startup in 2012). Led the Pentagon's side of the negotiations and publicly called Amodei a liar during the dispute.</div>
+            </div>
+
+            <div class="context-item">
+              <div class="context-term">David Sacks <span class="context-type">Who</span></div>
+              <div class="context-note">White House AI czar under the Trump administration. Called Anthropic 'committed leftists' on his podcast, citing the company's ties to Democratic-aligned organizations; worked on an executive order targeting 'woke AI' widely seen as directed at Anthropic.</div>
+            </div>
+
+            <div class="context-item">
+              <div class="context-term">supply-chain risk designation <span class="context-type">What</span></div>
+              <div class="context-note">A rarely used U.S. government designation (this appears to be the first major use against a domestic AI company) that can bar government contractors from using a vendor's technology -- here applied to Anthropic/Claude, threatening its relationships with defense contractors like Lockheed Martin, Amazon, and Microsoft.</div>
+            </div>
+            </div>
+      <div class="angle"><span class="angle-label">Investment angle:</span> This is a material, confirmed loss of favored-vendor status with the Pentagon for Anthropic, with OpenAI and xAI direct beneficiaries (both gained classified-system access Anthropic previously held alone) -- a concrete competitive shift in the government AI vendor landscape, relevant to Palantir's positioning too (its CTO tried to broker a compromise). Countervailing signal: Claude's consumer download numbers spiked during the same window, suggesting the safety stance may be a net positive for brand/consumer trust even as it costs government revenue -- worth weighing both sides rather than reading this as purely negative.</div>
+    </div>
+
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="day-header">2025-11-28</div>
+      <div class="day-entries">
+
+    <div class="entry-card" style="--accent:#4a8f5c">
+
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#4a8f5c">I</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Ilya Sutskever</span>
+          <span class="entry-handle">@ilyasut</span>
+          <span class="entry-platform">· X</span>
+          <span class="type-badge" style="background:#6b6b6b">X POST</span>
+
+        </div>
+      </div>
+      <div class="entry-text">One point I made that didn't come across: Scaling the current thing will keep leading to improvements. In particular, it won't stall. But something important will continue to be missing.</div>
+      <div class="tags-row"><span class="tag tag-platform">Safe Superintelligence</span></div>
+
+
+        <div class="engagement-row">
+          <span class="eng-stat">💬 745</span>
+          <span class="eng-stat">🔁 821</span>
+          <span class="eng-stat">❤ 9.8K</span>
+          <span class="eng-stat">👁 2.6M</span>
+        </div>
+
+
+
+
+      <div class="angle"><span class="angle-label">Investment angle:</span> Sutskever (ex-OpenAI chief scientist) publicly walking a middle line on scaling -- won't stall, but incomplete -- is relevant context for the ongoing debate about diminishing returns on pure compute scaling, which bears on capex justification across the major labs.</div>
+    </div>
+
+      </div>
+    </div>
+
+  </div>
+  <div class="view" id="view-people">
+
+<div class="people-section-label">Core roster (40)</div>
+<div class="people-grid">
+    <div class="person-card" style="--accent:#3b6ea5" data-person="sama">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#3b6ea5">S</div>
+        <div>
+          <div class="person-name">Sam Altman </div>
+          <div class="person-handle">@sama · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#3b6ea5">Lab Exec</div>
+      <div class="person-tag-row"><span class="person-tag">Lab Exec</span></div>
+      <div class="person-bio">CEO and co-founder of OpenAI; former president of Y Combinator. Central voice on OpenAI product strategy, fundraising, and compute buildout.</div>
+      <div class="person-tag-note">OpenAI CEO -- treat as company guidance/product narrative, not neutral analysis.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#3b6ea5" data-person="DarioAmodei">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#3b6ea5">D</div>
+        <div>
+          <div class="person-name">Dario Amodei </div>
+          <div class="person-handle">@DarioAmodei · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#3b6ea5">Lab Exec</div>
+      <div class="person-tag-row"><span class="person-tag">Lab Exec</span></div>
+      <div class="person-bio">CEO and co-founder of Anthropic; formerly VP of Research at OpenAI. Frequent commentator on AI safety and frontier model releases.</div>
+      <div class="person-tag-note">Anthropic CEO -- frontier-model and AI-safety framing straight from the lab.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#3b6ea5" data-person="demishassabis">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#3b6ea5">D</div>
+        <div>
+          <div class="person-name">Demis Hassabis </div>
+          <div class="person-handle">@demishassabis · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#3b6ea5">Lab Exec</div>
+      <div class="person-tag-row"><span class="person-tag">Lab Exec</span></div>
+      <div class="person-bio">CEO and co-founder of Google DeepMind; 2024 Nobel Laureate in Chemistry for AlphaFold. Former neuroscientist and game designer.</div>
+      <div class="person-tag-note">Google DeepMind CEO -- Google's AI research/product signal; Nobel-credentialed voice.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#3b6ea5" data-person="elonmusk">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#3b6ea5">E</div>
+        <div>
+          <div class="person-name">Elon Musk </div>
+          <div class="person-handle">@elonmusk · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#3b6ea5">Lab Exec</div>
+      <div class="person-tag-row"><span class="person-tag">Lab Exec</span></div>
+      <div class="person-bio">CEO of xAI, Tesla, and SpaceX; co-founder of OpenAI (departed 2018). Owns X/Twitter itself.</div>
+      <div class="person-tag-note">xAI/Tesla/SpaceX CEO -- high-reach but highly promotional; verify independently.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#3b6ea5" data-person="satyanadella">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#3b6ea5">S</div>
+        <div>
+          <div class="person-name">Satya Nadella </div>
+          <div class="person-handle">@satyanadella · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#3b6ea5">Lab Exec</div>
+      <div class="person-tag-row"><span class="person-tag">Lab Exec</span></div>
+      <div class="person-bio">CEO of Microsoft since 2014; architect of the Microsoft-OpenAI partnership and Azure AI infrastructure buildout.</div>
+      <div class="person-tag-note">Microsoft CEO -- Azure/OpenAI partnership signal from the platform side.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#3b6ea5" data-person="nvidia_jensen">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#3b6ea5">J</div>
+        <div>
+          <div class="person-name">Jensen Huang </div>
+          <div class="person-handle">@nvidia · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#3b6ea5">Lab Exec</div>
+      <div class="person-tag-row"><span class="person-tag">Lab Exec</span></div>
+      <div class="person-bio">Founder and CEO of Nvidia, the dominant supplier of AI training and inference chips.</div>
+      <div class="person-tag-note">Nvidia corporate/CEO account -- hardware roadmap and datacenter capex signal.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#3b6ea5" data-person="gdb">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#3b6ea5">G</div>
+        <div>
+          <div class="person-name">Greg Brockman </div>
+          <div class="person-handle">@gdb · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#3b6ea5">Lab Exec</div>
+      <div class="person-tag-row"><span class="person-tag">Lab Exec</span></div>
+      <div class="person-bio">President and co-founder of OpenAI, overseeing engineering and infrastructure.</div>
+      <div class="person-tag-note">OpenAI President -- engineering/infra-side company messaging.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#4a8f5c" data-person="karpathy">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#4a8f5c">A</div>
+        <div>
+          <div class="person-name">Andrej Karpathy </div>
+          <div class="person-handle">@karpathy · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#4a8f5c">Researcher</div>
+      <div class="person-tag-row"><span class="person-tag">Researcher</span></div>
+      <div class="person-bio">Founding member of OpenAI and former Tesla AI Director; now runs Eureka Labs, an independent AI education venture. Widely regarded as one of the clearest technical explainers of LLM internals.</div>
+      <div class="person-tag-note">Ex-OpenAI/Tesla; clearest technical explainer for judging new-model quality.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#4a8f5c" data-person="ylecun">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#4a8f5c">Y</div>
+        <div>
+          <div class="person-name">Yann LeCun </div>
+          <div class="person-handle">@ylecun · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#4a8f5c">Researcher</div>
+      <div class="person-tag-row"><span class="person-tag">Researcher</span></div>
+      <div class="person-bio">Turing Award co-recipient and deep learning pioneer; former Chief AI Scientist at Meta, now building world models at AMI Labs. Known for skepticism of pure LLM scaling.</div>
+      <div class="person-tag-note">Turing laureate, ex-Meta chief AI scientist -- contrarian voice on LLM scaling limits.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#4a8f5c" data-person="ilyasut">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#4a8f5c">I</div>
+        <div>
+          <div class="person-name">Ilya Sutskever </div>
+          <div class="person-handle">@ilyasut · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#4a8f5c">Researcher</div>
+      <div class="person-tag-row"><span class="person-tag">Researcher</span></div>
+      <div class="person-bio">Co-founder and former Chief Scientist of OpenAI; now co-founder of Safe Superintelligence Inc (SSI), focused on safety-first AGI research.</div>
+      <div class="person-tag-note">Ex-OpenAI chief scientist, now SSI -- safety-first AGI research framing.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#4a8f5c" data-person="AravSrinivas">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#4a8f5c">A</div>
+        <div>
+          <div class="person-name">Aravind Srinivas </div>
+          <div class="person-handle">@AravSrinivas · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#4a8f5c">Researcher</div>
+      <div class="person-tag-row"><span class="person-tag">Lab Exec</span></div>
+      <div class="person-bio">CEO and co-founder of Perplexity AI, an ex-OpenAI researcher building AI-native search.</div>
+      <div class="person-tag-note">Perplexity CEO -- AI-native search/product and multi-model-strategy signal.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#b8860b" data-person="GavinSBaker">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#b8860b">G</div>
+        <div>
+          <div class="person-name">Gavin Baker </div>
+          <div class="person-handle">@GavinSBaker · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#b8860b">Investor</div>
+      <div class="person-tag-row"><span class="person-tag">买方 (机构)</span></div>
+      <div class="person-bio">CIO and Managing Partner of Atreides Management; hedge fund investor known for deep semiconductor and AI supply-chain analysis, early Nvidia conviction.</div>
+      <div class="person-tag-note">Atreides CIO -- semiconductor/AI-supply-chain hedge fund view, early Nvidia conviction.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#b8860b" data-person="CathieDWood">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#b8860b">C</div>
+        <div>
+          <div class="person-name">Cathie Wood </div>
+          <div class="person-handle">@CathieDWood · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#b8860b">Investor</div>
+      <div class="person-tag-row"><span class="person-tag">名人/基金</span></div>
+      <div class="person-bio">Founder, CEO and CIO of ARK Invest; known for thematic, disruptive-innovation ETFs with heavy AI and robotics exposure.</div>
+      <div class="person-tag-note">ARK Invest CEO -- thematic AI/disruption bull case, high media visibility (verify independently).</div>
+    </div>
+
+    <div class="person-card" style="--accent:#b8860b" data-person="pmarca">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#b8860b">M</div>
+        <div>
+          <div class="person-name">Marc Andreessen </div>
+          <div class="person-handle">@pmarca · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#b8860b">Investor</div>
+      <div class="person-tag-row"><span class="person-tag">买方 (VC)</span></div>
+      <div class="person-bio">Co-founder of Netscape and co-founder/general partner of Andreessen Horowitz (a16z), a major AI-focused venture firm.</div>
+      <div class="person-tag-note">a16z co-founder -- AI-focused venture positioning and policy lobbying.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#b8860b" data-person="bgurley">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#b8860b">B</div>
+        <div>
+          <div class="person-name">Bill Gurley </div>
+          <div class="person-handle">@bgurley · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#b8860b">Investor</div>
+      <div class="person-tag-row"><span class="person-tag">买方 (VC)</span></div>
+      <div class="person-bio">General Partner at Benchmark; venture capitalist known for early Uber investment and commentary on market structure and platform economics.</div>
+      <div class="person-tag-note">Benchmark GP -- platform economics and market-structure commentary.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#c1622d" data-person="dylan522p">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#c1622d">D</div>
+        <div>
+          <div class="person-name">Dylan Patel </div>
+          <div class="person-handle">@dylan522p · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#c1622d">Analyst</div>
+      <div class="person-tag-row"><span class="person-tag">机构级思考/数据</span></div>
+      <div class="person-bio">Founder and chief analyst of SemiAnalysis; the leading independent research source on AI chip supply chains and datacenter capex.</div>
+      <div class="person-tag-note">SemiAnalysis founder -- hardcore AI chip supply-chain and datacenter capex tracking (also flagged in your own doc's buy-side extension list).</div>
+    </div>
+
+    <div class="person-card" style="--accent:#c1622d" data-person="fabricatedknowledge">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#c1622d">D</div>
+        <div>
+          <div class="person-name">Doug O'Laughlin </div>
+          <div class="person-handle">@FoolAllTheTime · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#c1622d">Analyst</div>
+      <div class="person-tag-row"><span class="person-tag">机构级思考/数据</span></div>
+      <div class="person-bio">Founder of the Fabricated Knowledge newsletter; semiconductor cycle analyst widely read on the sell side. Personal X handle is protected/private (posts not publicly visible) -- confirm preferred public handle with Denise (newsletter account @_fabknowledge_ returned 404 on this check, may have changed).</div>
+      <div class="person-tag-note">Fabricated Knowledge newsletter -- semiconductor cycle analysis for the sell side.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#b8860b" data-person="kaifulee">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#b8860b">K</div>
+        <div>
+          <div class="person-name">Kai-Fu Lee </div>
+          <div class="person-handle">@kaifulee · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#b8860b">Investor</div>
+      <div class="person-tag-row"><span class="person-tag">买方 (VC)</span></div>
+      <div class="person-bio">Chairman and CEO of Sinovation Ventures; former president of Google China; AI researcher and author of 'AI Superpowers'. Bridges US and Chinese AI development.</div>
+      <div class="person-tag-note">Sinovation Ventures chairman -- US-China AI bridge, enterprise AI-transformation commentary.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#b8860b" data-person="michaeljburry">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#b8860b">M</div>
+        <div>
+          <div class="person-name">Michael Burry </div>
+          <div class="person-handle">@michaeljburry · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#b8860b">Investor</div>
+      <div class="person-tag-row"><span class="person-tag">名人/基金 (逆向)</span></div>
+      <div class="person-bio">Founder of Scion Asset Management; investor known for predicting the 2008 housing crash ('The Big Short'). A useful contrarian voice on AI-bubble risk.</div>
+      <div class="person-tag-note">Scion Asset Management -- contrarian AI-bubble skeptic; verify account authenticity each pull (history of handle/name mismatches).</div>
+    </div>
+
+    <div class="person-card" style="--accent:#b8860b" data-person="saylor">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#b8860b">M</div>
+        <div>
+          <div class="person-name">Michael Saylor </div>
+          <div class="person-handle">@saylor · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#b8860b">Investor</div>
+      <div class="person-tag-row"><span class="person-tag">名人/基金</span></div>
+      <div class="person-bio">Executive Chairman of Strategy (formerly MicroStrategy); known for aggressive corporate bitcoin treasury strategy and views on digital capital infrastructure.</div>
+      <div class="person-tag-note">Strategy Executive Chairman -- bitcoin-as-capital thesis; AI-infra-capex-adjacent, not AI-native.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#8e5a8e" data-person="alliekmiller">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#8e5a8e">A</div>
+        <div>
+          <div class="person-name">Allie K. Miller </div>
+          <div class="person-handle">@alliekmiller · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#8e5a8e">Strategy</div>
+      <div class="person-tag-row"><span class="person-tag">策略/教育</span></div>
+      <div class="person-bio">AI advisor and investor; former AI leader at Amazon and IBM. Focuses on enterprise AI adoption and business strategy.</div>
+      <div class="person-tag-note">Ex-Amazon/IBM AI leader -- enterprise AI-adoption and business-strategy framing.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#6b6b6b" data-person="rowancheung">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#6b6b6b">R</div>
+        <div>
+          <div class="person-name">Rowan Cheung </div>
+          <div class="person-handle">@rowancheung · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#6b6b6b">Media</div>
+      <div class="person-tag-row"><span class="person-tag">媒体/突发</span></div>
+      <div class="person-bio">Founder of The Rundown AI, a widely read daily AI news digest.</div>
+      <div class="person-tag-note">The Rundown AI founder -- daily AI news aggregation and digest.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#6b6b6b" data-person="MarketWatch">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#6b6b6b">M</div>
+        <div>
+          <div class="person-name">MarketWatch </div>
+          <div class="person-handle">@MarketWatch · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#6b6b6b">Media</div>
+      <div class="person-tag-row"><span class="person-tag">媒体/突发</span></div>
+      <div class="person-bio">Dow Jones-owned financial news outlet covering markets, economy, and business; broad daily coverage useful for cross-checking AI-driven market moves against general financial news flow.</div>
+      <div class="person-tag-note">信息面与成交时段叙事 -- Dow Jones market news, useful for trading-session context.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#b8860b" data-person="APompliano">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#b8860b">A</div>
+        <div>
+          <div class="person-name">Anthony Pompliano </div>
+          <div class="person-handle">@APompliano · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#b8860b">Investor</div>
+      <div class="person-tag-row"><span class="person-tag">名人/基金</span></div>
+      <div class="person-bio">Founder of Professional Capital Management and host of The Pomp Podcast; investor and commentator focused heavily on Bitcoin/macro, increasingly covering AI infrastructure and corporate treasury strategy.</div>
+      <div class="person-tag-note">议程设置与情绪冲击（需独立验证）-- agenda-setting/sentiment shock; verify independently.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#6b6b6b" data-person="nytimesbusiness">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#6b6b6b">N</div>
+        <div>
+          <div class="person-name">NYT Business </div>
+          <div class="person-handle">@nytimesbusiness · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#6b6b6b">Media</div>
+      <div class="person-tag-row"><span class="person-tag">媒体/突发</span></div>
+      <div class="person-bio">The New York Times' business desk account, covering financial, tech, and media news including major AI industry stories.</div>
+      <div class="person-tag-note">信息面与成交时段叙事 -- mainstream business-desk news flow.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#b8860b" data-person="BillAckman">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#b8860b">B</div>
+        <div>
+          <div class="person-name">Bill Ackman </div>
+          <div class="person-handle">@BillAckman · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#b8860b">Investor</div>
+      <div class="person-tag-row"><span class="person-tag">名人/基金</span></div>
+      <div class="person-bio">CEO and founder of Pershing Square Capital Management; activist hedge fund investor known for large, publicly argued positions and frequent commentary on markets and macro policy.</div>
+      <div class="person-tag-note">议程设置与情绪冲击（需独立验证）-- agenda-setting/sentiment shock; verify independently.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#6b6b6b" data-person="jimcramer">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#6b6b6b">J</div>
+        <div>
+          <div class="person-name">Jim Cramer </div>
+          <div class="person-handle">@jimcramer · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#6b6b6b">Media</div>
+      <div class="person-tag-row"><span class="person-tag">名人/基金</span></div>
+      <div class="person-bio">Host of CNBC's Mad Money and co-founder of TheStreet; high-visibility mainstream commentator on individual stocks and market sentiment, including AI-related names.</div>
+      <div class="person-tag-note">议程设置与情绪冲击（需独立验证）-- agenda-setting/sentiment shock; verify independently.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#c1622d" data-person="LizAnnSonders">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#c1622d">L</div>
+        <div>
+          <div class="person-name">Liz Ann Sonders </div>
+          <div class="person-handle">@LizAnnSonders · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#c1622d">Analyst</div>
+      <div class="person-tag-row"><span class="person-tag">机构级思考/数据</span></div>
+      <div class="person-bio">Chief Investment Strategist at Charles Schwab; covers market/economic strategy and investor education, frequently named among Barron's most influential women in finance. Handle corrected from the requested '@LizAnnSonde' -- verified this is the real account (591K+ followers).</div>
+      <div class="person-tag-note">框架、历史分位、行为金融 -- institutional-grade framework, historical percentile context, behavioral finance.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#c1622d" data-person="morganhousel">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#c1622d">M</div>
+        <div>
+          <div class="person-name">Morgan Housel </div>
+          <div class="person-handle">@morganhousel · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#c1622d">Analyst</div>
+      <div class="person-tag-row"><span class="person-tag">机构级思考/数据</span></div>
+      <div class="person-bio">Partner at Collaborative Fund and author of 'The Psychology of Money'; writes on behavioral finance and investing psychology. Handle corrected from the requested '@morganhouse' -- verified this is the real account.</div>
+      <div class="person-tag-note">框架、历史分位、行为金融 -- institutional-grade framework, historical percentile context, behavioral finance.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#c1622d" data-person="BrianFeroldi">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#c1622d">B</div>
+        <div>
+          <div class="person-name">Brian Feroldi </div>
+          <div class="person-handle">@BrianFeroldi · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#c1622d">Analyst</div>
+      <div class="person-tag-row"><span class="person-tag">机构级思考/数据</span></div>
+      <div class="person-bio">Financial educator and author of 'Why Does the Stock Market Go Up?'; focuses on teaching fundamental business/stock analysis to retail investors.</div>
+      <div class="person-tag-note">框架、历史分位、行为金融 -- institutional-grade framework, historical percentile context, behavioral finance.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#c1622d" data-person="awealthofcs">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#c1622d">B</div>
+        <div>
+          <div class="person-name">Ben Carlson </div>
+          <div class="person-handle">@awealthofcs · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#c1622d">Analyst</div>
+      <div class="person-tag-row"><span class="person-tag">机构级思考/数据</span></div>
+      <div class="person-bio">Writes the 'A Wealth of Common Sense' blog; director of institutional asset management at Ritholtz Wealth Management, known for data-driven market history commentary. Handle corrected from the requested '@aweathofcs' -- verified this is the real account.</div>
+      <div class="person-tag-note">框架、历史分位、行为金融 -- institutional-grade framework, historical percentile context, behavioral finance.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#c1622d" data-person="charliebilello">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#c1622d">C</div>
+        <div>
+          <div class="person-name">Charlie Bilello </div>
+          <div class="person-handle">@charliebilello · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#c1622d">Analyst</div>
+      <div class="person-tag-row"><span class="person-tag">机构级思考/数据</span></div>
+      <div class="person-bio">Chief Market Strategist at Creative Planning; known for widely shared market/economic data charts and historical comparisons.</div>
+      <div class="person-tag-note">框架、历史分位、行为金融 -- institutional-grade framework, historical percentile context, behavioral finance.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#6b6b6b" data-person="stocktwits">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#6b6b6b">S</div>
+        <div>
+          <div class="person-name">Stocktwits </div>
+          <div class="person-handle">@stocktwits · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#6b6b6b">Media</div>
+      <div class="person-tag-row"><span class="person-tag">社区温度</span></div>
+      <div class="person-bio">Social platform/media account for retail trader and investor sentiment and commentary; useful as a retail-sentiment gauge alongside institutional voices.</div>
+      <div class="person-tag-note">零售拥挤度，不宜单独决策 -- retail-crowding gauge; not a standalone decision signal.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#b8860b" data-person="RayDalio">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#b8860b">R</div>
+        <div>
+          <div class="person-name">Ray Dalio </div>
+          <div class="person-handle">@RayDalio · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#b8860b">Investor</div>
+      <div class="person-tag-row"><span class="person-tag">买方扩展</span></div>
+      <div class="person-bio">Founder of Bridgewater Associates and author of 'Principles'; macro investor whose commentary spans debt cycles, geopolitics, and increasingly AI's economic impact.</div>
+      <div class="person-tag-note">桥水创始人，宏观原则与全球秩序长文；CFO/金融人榜单常列 -- Bridgewater founder, macro-principles and world-order essays.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#c1622d" data-person="AswathDamodaran">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#c1622d">A</div>
+        <div>
+          <div class="person-name">Aswath Damodaran </div>
+          <div class="person-handle">@AswathDamodaran · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#c1622d">Analyst</div>
+      <div class="person-tag-row"><span class="person-tag">买方扩展</span></div>
+      <div class="person-bio">NYU Stern professor of finance, known as the 'Dean of Valuation'; publishes detailed, methodical valuation analysis on individual companies including AI-exposed names.</div>
+      <div class="person-tag-note">估值「教主」，DCF/行业溢价讨论源头 -- the 'Dean of Valuation'; source of DCF/sector-premium debates.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#b8860b" data-person="patrick_oshag">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#b8860b">P</div>
+        <div>
+          <div class="person-name">Patrick O'Shaughnessy </div>
+          <div class="person-handle">@patrick_oshag · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#b8860b">Investor</div>
+      <div class="person-tag-row"><span class="person-tag">买方扩展</span></div>
+      <div class="person-bio">CEO of Positive Sum and host of the 'Invest Like the Best' podcast; interviews founders and investors, with growing focus on AI-native business models.</div>
+      <div class="person-tag-note">Invest Like the Best；VC/资配思维链 -- VC and asset-allocation thinking via long-form interviews.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#c1622d" data-person="10kdiver">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#c1622d">1</div>
+        <div>
+          <div class="person-name">10-K Diver </div>
+          <div class="person-handle">@10kdiver · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#c1622d">Analyst</div>
+      <div class="person-tag-row"><span class="person-tag">买方扩展</span></div>
+      <div class="person-bio">Pseudonymous finance educator known for detailed long-form threads on valuation, business quality, and investing frameworks. Handle corrected from the requested '@10kdriver' -- verified this is the real account.</div>
+      <div class="person-tag-note">10-K/复利/估值串讲，教学质量高 -- 10-K/compounding/valuation threads, high teaching quality.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#b8860b" data-person="LynAldenContact">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#b8860b">L</div>
+        <div>
+          <div class="person-name">Lyn Alden </div>
+          <div class="person-handle">@LynAldenContact · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#b8860b">Investor</div>
+      <div class="person-tag-row"><span class="person-tag">买方扩展</span></div>
+      <div class="person-bio">Founder of Lyn Alden Investment Strategy and author of 'Broken Money'; macro strategist covering fiscal/monetary policy, Bitcoin, and increasingly AI-driven capex and productivity trends.</div>
+      <div class="person-tag-note">宏观流动性与长周期框架，近年FinTwit高频 -- macro liquidity and long-cycle framework, high FinTwit frequency.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#c1622d" data-person="benthompson">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#c1622d">B</div>
+        <div>
+          <div class="person-name">Ben Thompson </div>
+          <div class="person-handle">@benthompson · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#c1622d">Analyst</div>
+      <div class="person-tag-row"><span class="person-tag">买方扩展</span></div>
+      <div class="person-bio">Founder and author of Stratechery; widely read tech strategy analyst covering platform economics and, extensively, the competitive dynamics between AI labs.</div>
+      <div class="person-tag-note">Stratechery；科技产业与平台经济结构（偏一级/科技买方）-- tech-industry and platform-economics structure.</div>
+    </div>
+
+    <div class="person-card" style="--accent:#c1622d" data-person="muddywatersre">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#c1622d">M</div>
+        <div>
+          <div class="person-name">Muddy Waters Research </div>
+          <div class="person-handle">@muddywatersre · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#c1622d">Analyst</div>
+      <div class="person-tag-row"><span class="person-tag">空头/取证簇</span></div>
+      <div class="person-bio">Activist short-seller research firm founded by Carson Block in 2010; publishes due-diligence reports alleging accounting problems or fraud at public companies.</div>
+      <div class="person-tag-note">信号强但对立争议大 -- strong signal but highly contested activist short-seller research.</div>
+    </div>
+    </div>
+
+    <div class="people-section-label discovered-label">Newly discovered via mentions (13) — unconfirmed, review before treating as tracked sources</div>
+    <div class="people-grid">
+    <div class="person-card" style="--accent:#a33a3a" data-person="finkd">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#a33a3a">M</div>
+        <div>
+          <div class="person-name">Mark Zuckerberg <span class="new-badge">NEW</span></div>
+          <div class="person-handle">@finkd · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#a33a3a">Unconfirmed</div>
+
+      <div class="person-bio">CEO of Meta. Auto-added because @satyanadella referenced his essay on 'a positive vision for a world with superintelligence' on 2026-07-28. Not yet promoted to core roster -- confirm if you want Meta's CEO tracked directly.</div>
+
+    </div>
+
+    <div class="person-card" style="--accent:#a33a3a" data-person="VivekGRamaswamy">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#a33a3a">V</div>
+        <div>
+          <div class="person-name">Vivek Ramaswamy <span class="new-badge">NEW</span></div>
+          <div class="person-handle">@VivekGRamaswamy · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#a33a3a">Unconfirmed</div>
+
+      <div class="person-bio">Politician (Ohio); posted a data center policy pledge that Gavin Baker endorsed on 2026-08-07. Auto-added because he was quoted in a tracked post. Not yet promoted -- relevant mainly for AI infrastructure/power policy risk tracking.</div>
+
+    </div>
+
+    <div class="person-card" style="--accent:#a33a3a" data-person="firstadopter">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#a33a3a">t</div>
+        <div>
+          <div class="person-name">tae kim <span class="new-badge">NEW</span></div>
+          <div class="person-handle">@firstadopter · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#a33a3a">Unconfirmed</div>
+
+      <div class="person-bio">Commentator who claimed Jeff Dean is leaving Google and Demis Hassabis is stepping back from day-to-day DeepMind leadership (2026-08-05), which Bill Gurley then engaged with. Auto-added via mention. Claim is unverified -- worth assessing this account's track record before treating as a reliable source.</div>
+
+    </div>
+
+    <div class="person-card" style="--accent:#a33a3a" data-person="JensenHuang_personal">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#a33a3a">J</div>
+        <div>
+          <div class="person-name">Jensen Huang (personal handle) <span class="new-badge">NEW</span></div>
+          <div class="person-handle">@JensenHuang · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#a33a3a">Unconfirmed</div>
+
+      <div class="person-bio">Appears to be Jensen Huang's personal account, distinct from the corporate @nvidia handle currently tracked as his core entry. Auto-added because Demis Hassabis's post surfaced a reply from this handle on 2026-07-25. Confirm whether to track this handle instead of/in addition to @nvidia.</div>
+
+    </div>
+
+    <div class="person-card" style="--accent:#a33a3a" data-person="ClaudeDevs">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#a33a3a">C</div>
+        <div>
+          <div class="person-name">Claude Devs (product account) <span class="new-badge">NEW</span></div>
+          <div class="person-handle">@ClaudeDevs · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#a33a3a">Unconfirmed</div>
+
+      <div class="person-bio">Product/developer account (not an individual). Auto-added because Allie K. Miller's post quoted its announcement about Claude Code's auto mode default change. Flagged for you to decide whether product accounts belong in this roster at all.</div>
+
+    </div>
+
+    <div class="person-card" style="--accent:#a33a3a" data-person="jeffdean">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#a33a3a">J</div>
+        <div>
+          <div class="person-name">Jeff Dean <span class="new-badge">NEW</span></div>
+          <div class="person-handle">@JeffDean · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#a33a3a">Unconfirmed</div>
+
+      <div class="person-bio">Google's (now former) Chief Scientist; 27-year Google veteran credited with foundational infrastructure work (MapReduce, BigTable, TensorFlow) and former leader of Google Brain/Google AI. Confirmed Aug 5, 2026 (CNBC, Axios): departing to co-found Discovery Loop, an independent AI research company backed by Google as investor and cloud provider. Auto-added because he was named (not @-mentioned) inside a quoted post that Bill Gurley engaged with -- confirm if you want him tracked directly; his current X handle wasn't verified in this pull.</div>
+
+    </div>
+
+    <div class="person-card" style="--accent:#a33a3a" data-person="PeteHegseth">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#a33a3a">P</div>
+        <div>
+          <div class="person-name">Pete Hegseth <span class="new-badge">NEW</span></div>
+          <div class="person-handle">N/A (named in WSJ coverage) · N/A</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#a33a3a">Unconfirmed</div>
+
+      <div class="person-bio">U.S. Secretary of Defense. Central figure in the Pentagon's 2026 breakup with Anthropic over AI weapons guardrails, per WSJ reporting.</div>
+
+    </div>
+
+    <div class="person-card" style="--accent:#a33a3a" data-person="EmilMichael">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#a33a3a">E</div>
+        <div>
+          <div class="person-name">Emil Michael <span class="new-badge">NEW</span></div>
+          <div class="person-handle">N/A (named in WSJ coverage) · N/A</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#a33a3a">Unconfirmed</div>
+
+      <div class="person-bio">Undersecretary of Defense for Research and Engineering; the Pentagon's point person in the Anthropic relationship breakdown, per WSJ.</div>
+
+    </div>
+
+    <div class="person-card" style="--accent:#a33a3a" data-person="DanielaAmodei">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#a33a3a">D</div>
+        <div>
+          <div class="person-name">Daniela Amodei <span class="new-badge">NEW</span></div>
+          <div class="person-handle">N/A (named in WSJ coverage) · N/A</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#a33a3a">Unconfirmed</div>
+
+      <div class="person-bio">President and co-founder of Anthropic; Dario Amodei's sister. Not yet promoted to core -- confirm if you want her tracked directly (e.g. if she has an active X account).</div>
+
+    </div>
+
+    <div class="person-card" style="--accent:#a33a3a" data-person="Eric_Wallace_">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#a33a3a">E</div>
+        <div>
+          <div class="person-name">Eric Wallace <span class="new-badge">NEW</span></div>
+          <div class="person-handle">@Eric_Wallace_ · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#a33a3a">Unconfirmed</div>
+
+      <div class="person-bio">Appears to be an OpenAI researcher/team member who announced the GPT-5.6-Cyber model release on 2026-08-10, amplified by both Sam Altman and Greg Brockman. Auto-added via mention -- role/title not independently verified in this pull.</div>
+
+    </div>
+
+    <div class="person-card" style="--accent:#a33a3a" data-person="sundarpichai">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#a33a3a">S</div>
+        <div>
+          <div class="person-name">Sundar Pichai <span class="new-badge">NEW</span></div>
+          <div class="person-handle">@sundarpichai · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#a33a3a">Unconfirmed</div>
+
+      <div class="person-bio">CEO of Alphabet and Google. Auto-added because Demis Hassabis quoted his post announcing the Gemini App crossed 1B monthly users on 2026-08-12. Not yet promoted to core roster -- confirm if you want Google's CEO tracked directly.</div>
+
+    </div>
+
+    <div class="person-card" style="--accent:#a33a3a" data-person="XFreeze">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#a33a3a">X</div>
+        <div>
+          <div class="person-name">X Freeze <span class="new-badge">NEW</span></div>
+          <div class="person-handle">@XFreeze · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#a33a3a">Unconfirmed</div>
+
+      <div class="person-bio">Account that posted about SpaceX's lunar base ambitions, which Elon Musk then quote-replied to on 2026-08-12 ('Moonbase Alpha'). Auto-added via mention -- appears to be a space/SpaceX-focused commentary account, not independently verified.</div>
+
+    </div>
+
+    <div class="person-card" style="--accent:#a33a3a" data-person="ericvishria">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#a33a3a">E</div>
+        <div>
+          <div class="person-name">Eric Vishria <span class="new-badge">NEW</span></div>
+          <div class="person-handle">@ericvishria · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#a33a3a">Unconfirmed</div>
+
+      <div class="person-bio">General Partner at Benchmark; roughly a decade investing across software and hardware, with portfolio companies including Fireworks AI, Sierra, Sunday Robotics, and Cerebras. Auto-added because Patrick O'Shaughnessy featured him in an Invest Like the Best conversation on 2026-08-11 arguing investors are undersizing the AI market the way they undersized cloud in 2014.</div>
+
+    </div>
+    </div>
+
+  </div>
+  <div class="view" id="view-network">
+    <div class="people-section-label">Who mentioned whom</div>
+
+        <div class="network-row">
+          <span class="net-person">Bill Gurley</span>
+          <span class="net-arrow">mentioned →</span>
+          <span class="net-person">LeaveDelaware</span>
+          <span class="net-date">2026-08-12</span>
+        </div>
+
+        <div class="network-row">
+          <span class="net-person">Cathie Wood</span>
+          <span class="net-arrow">mentioned →</span>
+          <span class="net-person">bitcoinpolicy</span>
+          <span class="net-date">2026-08-12</span>
+        </div>
+
+        <div class="network-row">
+          <span class="net-person">Aravind Srinivas</span>
+          <span class="net-arrow">mentioned →</span>
+          <span class="net-person">perplexitydevs</span>
+          <span class="net-date">2026-08-12</span>
+        </div>
+
+        <div class="network-row">
+          <span class="net-person">Aravind Srinivas</span>
+          <span class="net-arrow">mentioned →</span>
+          <span class="net-person">nvidia</span>
+          <span class="net-date">2026-08-12</span>
+        </div>
+
+        <div class="network-row">
+          <span class="net-person">Elon Musk</span>
+          <span class="net-arrow">mentioned →</span>
+          <span class="net-person">X Freeze</span>
+          <span class="net-date">2026-08-12</span>
+        </div>
+
+        <div class="network-row">
+          <span class="net-person">Demis Hassabis</span>
+          <span class="net-arrow">mentioned →</span>
+          <span class="net-person">Sundar Pichai</span>
+          <span class="net-date">2026-08-12</span>
+        </div>
+
+        <div class="network-row">
+          <span class="net-person">Demis Hassabis</span>
+          <span class="net-arrow">mentioned →</span>
+          <span class="net-person">joshwoodward</span>
+          <span class="net-date">2026-08-12</span>
+        </div>
+
+        <div class="network-row">
+          <span class="net-person">Rowan Cheung</span>
+          <span class="net-arrow">mentioned →</span>
+          <span class="net-person">Mark Zuckerberg</span>
+          <span class="net-date">2026-08-11</span>
+        </div>
+
+        <div class="network-row">
+          <span class="net-person">Patrick O'Shaughnessy</span>
+          <span class="net-arrow">mentioned →</span>
+          <span class="net-person">Eric Vishria</span>
+          <span class="net-date">2026-08-11</span>
+        </div>
+
+        <div class="network-row">
+          <span class="net-person">Greg Brockman</span>
+          <span class="net-arrow">mentioned →</span>
+          <span class="net-person">OpenAI</span>
+          <span class="net-date">2026-08-10</span>
+        </div>
+
+        <div class="network-row">
+          <span class="net-person">Sam Altman</span>
+          <span class="net-arrow">mentioned →</span>
+          <span class="net-person">Eric Wallace</span>
+          <span class="net-date">2026-08-10</span>
+        </div>
+
+        <div class="network-row">
+          <span class="net-person">Cathie Wood</span>
+          <span class="net-arrow">mentioned →</span>
+          <span class="net-person">ARKInvest</span>
+          <span class="net-date">2026-08-09</span>
+        </div>
+
+        <div class="network-row">
+          <span class="net-person">Allie K. Miller</span>
+          <span class="net-arrow">mentioned →</span>
+          <span class="net-person">Claude Devs (product account)</span>
+          <span class="net-date">2026-08-08</span>
+        </div>
+
+        <div class="network-row">
+          <span class="net-person">Gavin Baker</span>
+          <span class="net-arrow">mentioned →</span>
+          <span class="net-person">Vivek Ramaswamy</span>
+          <span class="net-date">2026-08-07</span>
+        </div>
+
+        <div class="network-row">
+          <span class="net-person">Sam Altman</span>
+          <span class="net-arrow">mentioned →</span>
+          <span class="net-person">OpenAI</span>
+          <span class="net-date">2026-08-06</span>
+        </div>
+
+        <div class="network-row">
+          <span class="net-person">Jensen Huang</span>
+          <span class="net-arrow">mentioned →</span>
+          <span class="net-person">NVIDIAAIInfra</span>
+          <span class="net-date">2026-08-06</span>
+        </div>
+
+        <div class="network-row">
+          <span class="net-person">Aravind Srinivas</span>
+          <span class="net-arrow">mentioned →</span>
+          <span class="net-person">perplexity_ai</span>
+          <span class="net-date">2026-08-06</span>
+        </div>
+
+        <div class="network-row">
+          <span class="net-person">Bill Gurley</span>
+          <span class="net-arrow">mentioned →</span>
+          <span class="net-person">tae kim</span>
+          <span class="net-date">2026-08-06</span>
+        </div>
+
+        <div class="network-row">
+          <span class="net-person">Kai-Fu Lee</span>
+          <span class="net-arrow">mentioned →</span>
+          <span class="net-person">CrownPublishing</span>
+          <span class="net-date">2026-08-04</span>
+        </div>
+
+        <div class="network-row">
+          <span class="net-person">Marc Andreessen</span>
+          <span class="net-arrow">mentioned →</span>
+          <span class="net-person">a16zcrypto</span>
+          <span class="net-date">2026-08-03</span>
+        </div>
+
+        <div class="network-row">
+          <span class="net-person">Dario Amodei</span>
+          <span class="net-arrow">mentioned →</span>
+          <span class="net-person">Daniela Amodei</span>
+          <span class="net-date">2026-07-30</span>
+        </div>
+
+        <div class="network-row">
+          <span class="net-person">Satya Nadella</span>
+          <span class="net-arrow">mentioned →</span>
+          <span class="net-person">Mark Zuckerberg</span>
+          <span class="net-date">2026-07-28</span>
+        </div>
+
+        <div class="network-row">
+          <span class="net-person">Demis Hassabis</span>
+          <span class="net-arrow">mentioned →</span>
+          <span class="net-person">JensenHuang</span>
+          <span class="net-date">2026-07-25</span>
+        </div>
+
+        <div class="network-row">
+          <span class="net-person">Andrej Karpathy</span>
+          <span class="net-arrow">mentioned →</span>
+          <span class="net-person">claudeai</span>
+          <span class="net-date">2026-06-09</span>
+        </div>
+
+        <div class="network-row">
+          <span class="net-person">Dario Amodei</span>
+          <span class="net-arrow">mentioned →</span>
+          <span class="net-person">AnthropicAI</span>
+          <span class="net-date">2026-04-07</span>
+        </div>
+
+        <div class="network-row">
+          <span class="net-person">Dario Amodei</span>
+          <span class="net-arrow">mentioned →</span>
+          <span class="net-person">Pete Hegseth</span>
+          <span class="net-date">2026-03-03</span>
+        </div>
+
+        <div class="network-row">
+          <span class="net-person">Dario Amodei</span>
+          <span class="net-arrow">mentioned →</span>
+          <span class="net-person">Emil Michael</span>
+          <span class="net-date">2026-03-03</span>
+        </div>
+
+  </div>
+</main>
+<script>
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('view-' + btn.dataset.view).classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
