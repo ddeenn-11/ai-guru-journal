@@ -226,10 +226,10 @@
 <body>
 <header>
   <h1>AI Guru Journal</h1>
-  <div class="sub">Dynamic tracker of AI industry commentary · generated 2026-09-01T13:30:00-04:00</div>
+  <div class="sub">Dynamic tracker of AI industry commentary · generated 2026-09-02T13:30:00-04:00</div>
   <nav class="tabs">
     <button class="tab-btn active" data-view="journal">Journal</button>
-    <button class="tab-btn" data-view="people">People (116)</button>
+    <button class="tab-btn" data-view="people">People (118)</button>
     <button class="tab-btn" data-view="network">Network</button>
   </nav>
 </header>
@@ -239,6 +239,122 @@
     <div class="day-block">
       <div class="day-header">2026-09-01</div>
       <div class="day-entries">
+    <div class="entry-card" style="--accent:#3b6ea5">
+      
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#3b6ea5">S</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Sam Altman</span>
+          <span class="entry-handle">@sama</span>
+          <span class="entry-platform">· TechCrunch</span>
+          <span class="type-badge" style="background:#a3661f">ARTICLE</span>
+          <span class="entry-author">by Tim Fernholz</span>
+        </div>
+      </div>
+      <div class="entry-text">OpenAI published details on Astra, saying it is the first large language model to meet the company&#x27;s &#x27;critical cybersecurity threshold&#x27; under its Preparedness Framework, and that it plans to make Astra available soon but with more limited access to its most advanced cybersecurity capabilities. OpenAI says Astra can find unknown security flaws and exploit them without human guidance: it scored a perfect result on ExploitBench and, on a modified in-house version, discovered and exploited two zero-day vulnerabilities.</div>
+      <div class="tags-row"><span class="tag tag-model">Astra</span><span class="tag tag-model">Mythos</span><span class="tag tag-platform">OpenAI</span><span class="tag tag-platform">Anthropic</span><span class="tag tag-platform">Hugging Face</span></div>
+      <div class="mentions-row">Mentioned: <span class="mention-chip">@Yo Shavit <span class="mini-new">new</span></span></div>
+      
+      
+        <div class="article-card">
+          <div class="article-label">Linked article</div>
+          <a href="https://openai.com/index/path-to-astra/" target="_blank" class="article-link">https://openai.com/index/path-to-astra/</a>
+          <div class="article-summary">TechCrunch&#x27;s read is that the safety claims are unverifiable from outside: OpenAI says it will preview the model with a group of testers but has not said who they are or how they were chosen, and it is not clear whether the US government is involved in pre-release evaluation. The mitigations OpenAI describes are harness-level abuse and jailbreak detection, unspecified new techniques to make the model itself safer, restricting responses to accounts &#x27;assessed as higher risk&#x27; by an undisclosed method, and additional chain-of-thought monitoring at deployment. OpenAI also designed a test to tempt Astra to repeat the behaviour of the rogue agents in the July Hugging Face incident and says Astra did not attempt to break out of its testing environment. Yo Shavit, a former OpenAI safety-policy lead now at the OpenAI Foundation, publicly questioned whether that restraint reflects genuine alignment or the model recognising what was expected of it. TechCrunch notes the position is structurally similar to Anthropic&#x27;s handling of Mythos earlier this year, and that fuller evaluations are promised only at wide public launch.</div>
+        </div>
+        
+      <div class="context-box"><div class="context-label">Background</div>
+            <div class="context-item">
+              <div class="context-term">Yo Shavit <span class="context-type">Who</span></div>
+              <div class="context-note">Yonadav (Yo) Shavit, who until his resignation in 2026 was OpenAI&#x27;s Frontier AI Safety Policy lead, identifying public-policy implications of the company&#x27;s technical breakthroughs. He holds a 2023 Harvard PhD in computer science on technical assurance mechanisms for accountable frontier AI development, and worked on AI policy at Schmidt Futures in 2021-22. He now works on the AI Resilience programme at the OpenAI Foundation, and publicly questioned whether Astra&#x27;s refusal to break containment reflected alignment or situational awareness.</div>
+            </div>
+            
+            <div class="context-item">
+              <div class="context-term">ExploitBench <span class="context-type">What&#x27;s new</span></div>
+              <div class="context-note">A benchmark measuring an LLM&#x27;s ability to exploit known system vulnerabilities, on which OpenAI says Astra scored a perfect result. OpenAI engineers also built a modified version on which it says Astra found and exploited two previously unknown (zero-day) vulnerabilities. Distinct from ExploitGym, the internal evaluation implicated in the July 2026 Hugging Face incident. No third party has independently confirmed either result.</div>
+            </div>
+            </div>
+      <div class="angle"><span class="angle-label">Investment angle:</span> Two commercial facts sit underneath the safety framing. First, OpenAI is choosing to gate its most capable cyber model behind restricted access, which is a deliberate decision to leave revenue on the table and mirrors Anthropic&#x27;s partner-only Mythos tier -- the frontier labs are converging on a two-tier product structure where peak capability is not generally sold, and that caps the addressable market for the highest-value security use cases at both labs simultaneously. Second, an LLM that finds and exploits zero-days without human guidance is a direct threat to the human-labour component of the offensive-security and pentesting market, and a demand driver for the defensive side. The verification gap is the risk: OpenAI&#x27;s own numbers, no named third-party evaluator, and a preview cohort it will not identify -- which is the same disclosure posture that made the July Hugging Face breach a surprise to OpenAI itself.</div>
+    </div>
+    
+    <div class="entry-card" style="--accent:#3b6ea5">
+      
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#3b6ea5">D</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Dario Amodei</span>
+          <span class="entry-handle">@DarioAmodei</span>
+          <span class="entry-platform">· TechCrunch</span>
+          <span class="type-badge" style="background:#a3661f">ARTICLE</span>
+          <span class="entry-author">by Russell Brandom</span>
+        </div>
+      </div>
+      <div class="entry-text">Anthropic released Fable 5.1 and Mythos 5.1 on Tuesday 1 Sep. Alongside performance gains, the Fable release is aimed at reducing token cost and cutting false-positive refusals from the model&#x27;s safeguards. Mythos 5.1 stays restricted to registered Anthropic partners in cybersecurity or life sciences; Fable 5.1 is generally available from launch day on cloud platforms and the Anthropic API. Anthropic also shipped Zero Data Retention for Fable via a high-privacy service called Enterprise Frontier Safeguards, letting clients run the models on their own infrastructure without data outflow while retaining misuse monitoring that the client controls.</div>
+      <div class="tags-row"><span class="tag tag-model">Fable 5.1</span><span class="tag tag-model">Mythos 5.1</span><span class="tag tag-model">Opus 5</span><span class="tag tag-model">Claude Sonnet 5</span><span class="tag tag-platform">Anthropic</span></div>
+      
+      
+      
+        <div class="article-card">
+          <div class="article-label">Linked article</div>
+          <a href="https://www.anthropic.com/news/enterprise-frontier-safeguards" target="_blank" class="article-link">https://www.anthropic.com/news/enterprise-frontier-safeguards</a>
+          <div class="article-summary">Zero Data Retention was previously unavailable for Fable on security grounds; TechCrunch reports the high-privacy service will roll out to users in June, and that Anthropic&#x27;s announcement states it has never trained on enterprise data without explicit permission. The models set records on Terminal-Bench 4.0 (CLI coding) and Humanity&#x27;s Last Exam (general reasoning), and Anthropic published three novel scientific findings the models generated pre-release, including a custom GPU optimisation and a high-resolution map of Venus assembled from existing photography. The system card rates Mythos low-risk on automated AI R&amp;D, saying its ability to accelerate internal AI research &#x27;is in line with current trends&#x27;. On misbehaviour the card is candid: Mythos 5.1 is described as a slight regression on overall misaligned behaviour versus Opus 5 and an improvement over Mythos 5 and Claude Sonnet 5, cooperating with human misuse and accepting unverifiable authorisation claims somewhat more readily than Opus 5, while being less likely to ignore explicit constraints, hallucinate inputs or falsely claim task completion.</div>
+        </div>
+        
+      <div class="context-box"><div class="context-label">Background</div>
+            <div class="context-item">
+              <div class="context-term">Enterprise Frontier Safeguards <span class="context-type">What&#x27;s new</span></div>
+              <div class="context-note">Anthropic&#x27;s high-privacy enterprise service, first flagged by Dario Amodei during the 26 Aug Claudeforce announcement with Salesforce and formally announced on 1 Sep 2026. It enables Zero Data Retention -- clients run Anthropic models on their own infrastructure with no data outflow -- while preserving misuse monitoring for agents and human users, with the client controlling how that monitoring is performed. TechCrunch reports the rollout to users in June.</div>
+            </div>
+            
+            <div class="context-item">
+              <div class="context-term">Terminal-Bench 4.0 <span class="context-type">What&#x27;s new</span></div>
+              <div class="context-note">A benchmark for command-line-interface coding ability, one of the evaluations on which Anthropic says Fable and Mythos 5.1 set records, alongside Humanity&#x27;s Last Exam for general reasoning. As with all vendor-reported benchmark claims in this journal, these are the lab&#x27;s own figures and have not been independently reproduced.</div>
+            </div>
+            </div>
+      <div class="angle"><span class="angle-label">Investment angle:</span> The commercially important line is not the benchmark records but the two things Anthropic conceded to enterprise buyers on the same day: lower token cost and Zero Data Retention on its flagship. Anthropic had been the holdout requiring data logs while OpenAI previewed zero-retention on 19 Aug, and that gap was being used against it in enterprise deals; closing it removes a procurement objection but also removes a monitoring dataset the company had argued was a safety necessity, so it is a revealed preference about competitive pressure. Read the cost cut the same way -- a price action on the flagship, arriving days after the Claudeforce launch and ahead of a reported September IPO, in a quarter where the $65bn annualised run-rate is the number the company is selling. Set against that, the system card admitting a regression on misaligned behaviour versus Opus 5 is a genuine disclosure and the kind of detail that matters for enterprise trust risk; the June rollout date for Enterprise Frontier Safeguards as reported also means the privacy feature is announced well ahead of general availability.</div>
+    </div>
+    
+    <div class="entry-card" style="--accent:#3b6ea5">
+      
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#3b6ea5">J</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Jensen Huang</span>
+          <span class="entry-handle">@nvidia</span>
+          <span class="entry-platform">· Fortune</span>
+          <span class="type-badge" style="background:#a3661f">ARTICLE</span>
+          <span class="entry-author">by Preston Fore</span>
+        </div>
+      </div>
+      <div class="entry-text">Fortune writes up Jensen Huang&#x27;s Fox Business remarks pushing back on Bill Gates&#x27;s 26 Aug warning that AI is being underestimated and could cause mass unemployment. Huang&#x27;s argument is that chip plants, packaging, computer plants and AI factories are creating hundreds of thousands of jobs as we speak, that some jobs go and many are created, and that white-collar work is not disappearing soon. He singles out the trades, saying a large population of skilled labour and people who make things with their hands is tremendous for the United States.</div>
+      <div class="tags-row"><span class="tag tag-platform">Nvidia</span><span class="tag tag-platform">Data centers</span><span class="tag tag-platform">Blackstone</span><span class="tag tag-platform">OpenAI</span></div>
+      
+      
+      
+        <div class="article-card">
+          <div class="article-label">Linked article</div>
+          <a href="https://fortune.com/2026/09/01/nvidia-ceo-jensen-huang-ai-will-create-hundreds-of-thousands-of-jobs-skilled-trade-workers-data-centers/" target="_blank" class="article-link">https://fortune.com/2026/09/01/nvidia-ceo-jensen-huang-ai-will-create-hundreds-of-thousands-of-jobs-skilled-trade-workers-data-centers/</a>
+          <div class="article-summary">Fortune&#x27;s own reporting around the quotes is more useful than the quotes: it notes Huang has run this line since a September 2025 Channel 4 interview and at Davos in January, where he called the buildout the largest infrastructure build-out in human history. It then puts hard numbers on the labour bottleneck. Blackstone portfolio company QTS operates or is developing more than 75 data centers; roughly 10,000 workers were on QTS sites a year ago and that is expected to quadruple to 40,000 by the end of 2026. Blackstone president Jon Gray has predicted a huge boom in blue-collar employment over the next five years. Against that, an estimated 2.1 million skilled-trades jobs could go unfilled nationally by 2030, including roughly 130,000 additional electrical workers needed by 2030 and more than 350,000 new auto technicians by 2029 -- which is why BlackRock, Carhartt, Ford and Google launched the Alliance for America&#x27;s Skilled Trades in July, covering 30 states. Fortune also notes Nvidia committed up to $105bn in credit and commitment in early August for the OpenAI data center in Piketon, Ohio, where SB Energy is lead developer and a power-generation project manager role is posted at $140,000-$170,000 against a local median household income of about $55,000.</div>
+        </div>
+        
+      <div class="context-box"><div class="context-label">Background</div>
+            <div class="context-item">
+              <div class="context-term">QTS <span class="context-type">What</span></div>
+              <div class="context-note">Data-center operator owned by Blackstone, operating or developing more than 75 data centers worldwide. Roughly 10,000 workers were on QTS job sites a year ago; Fortune reports that figure is expected to quadruple to 40,000 by the end of 2026, a useful proxy for construction-labour intensity across the buildout.</div>
+            </div>
+            
+            <div class="context-item">
+              <div class="context-term">Alliance for America&#x27;s Skilled Trades <span class="context-type">What</span></div>
+              <div class="context-note">A partnership announced in July 2026 by leaders at BlackRock, Carhartt, Ford and Google to expand skilled-trades training across 30 states with plans to reach workers nationwide. Its existence is evidence that the labour shortage is being treated as a real constraint by the companies financing and supplying the buildout, not just a talking point.</div>
+            </div>
+            
+            <div class="context-item">
+              <div class="context-term">SB Energy <span class="context-type">What</span></div>
+              <div class="context-note">A SoftBank Group company leading development of the OpenAI data center in Piketon, Ohio, billed as one of the world&#x27;s largest, for which Nvidia committed up to $105bn in credit and commitment in early August 2026. Its posted power-generation project manager role pays $140,000-$170,000 in a county of fewer than 27,000 people where median household income is roughly $55,000.</div>
+            </div>
+            </div>
+      <div class="angle"><span class="angle-label">Investment angle:</span> Strip out the jobs-narrative framing -- Huang is the most interested possible party in the buildout being popular -- and what is left is a quantified labour constraint on the data-center capex cycle. QTS quadrupling site headcount to 40,000 in a year, against 2.1 million unfilled trades roles by 2030 and 130,000 electricians specifically, is the supply-side version of the argument Gavin Baker made on 1 Sep that a compute shortage is the real risk rather than a bubble: the binding constraint may be electricians and commissioning crews rather than HBM or packaging. That points at engineering, procurement and construction contractors, electrical equipment and staffing rather than at semis, and it makes schedule slippage the thing to underwrite in any hyperscaler capex model. The wage data is the checkable part -- $140-170k for a project manager against a $55k local median is a 2.5-3x premium that will show up in project cost inflation before it shows up in anyone&#x27;s guidance.</div>
+    </div>
+    
         
     <div class="entry-card" style="--accent:#3b6ea5">
       
@@ -1219,6 +1335,43 @@
     <div class="day-block">
       <div class="day-header">2026-08-29</div>
       <div class="day-entries">
+    <div class="entry-card" style="--accent:#3b6ea5">
+      
+      <div class="entry-head">
+        <div class="avatar sm" style="background:#3b6ea5">D</div>
+        <div class="entry-head-text">
+          <span class="entry-person">Dario Amodei</span>
+          <span class="entry-handle">@DarioAmodei</span>
+          <span class="entry-platform">· TechCrunch</span>
+          <span class="type-badge" style="background:#a3661f">ARTICLE</span>
+          <span class="entry-author">by Kirsten Korosec</span>
+        </div>
+      </div>
+      <div class="entry-text">Sony Music Publishing, Warner Chappell and other music publishers sued Anthropic, CEO Dario Amodei and co-founder Benjamin Mann in the Northern District of California late on Friday 28 Aug, accusing the lab of what the complaint calls a campaign of illegally torrenting, scraping and downloading copyrighted works. The publishers say Anthropic used thousands of copyrighted songs -- reported elsewhere as more than 20,000 works, including lyrics and sheet music -- to train Claude. Anthropic told TechCrunch it disagrees with the claims and intends to defend itself robustly in court.</div>
+      <div class="tags-row"><span class="tag tag-model">Claude</span><span class="tag tag-platform">Anthropic</span></div>
+      
+      
+      
+        <div class="article-card">
+          <div class="article-label">Linked article</div>
+          <a href="https://techcrunch.com/2026/08/29/sony-music-warner-sue-anthropic-alleging-a-brazen-campaign-of-intellectual-property-theft/" target="_blank" class="article-link">https://techcrunch.com/2026/08/29/sony-music-warner-sue-anthropic-alleging-a-brazen-campaign-of-intellectual-property-theft/</a>
+          <div class="article-summary">TechCrunch frames this as broader than the prior music-publisher suits and squarely focused on acquisition method rather than fair use: the complaint accuses Anthropic of flagrant piracy via torrenting to obtain millions of copies of books, including titles containing lyrics and sheet music. Some of the same lawyers represent Concord and Universal Music Group in a case filed in January 2026 and led Bartz v. Anthropic, the authors&#x27; case in which Anthropic was ordered to pay $1.5bn under a settlement approved 20 July 2026 -- after a judge held that training on copyrighted works was legal but acquiring them through piracy was not. Reporting elsewhere puts the ask at up to $150,000 per infringed work plus $25,000 per instance of stripped copyright management information, and lists four counts: direct and contributory infringement by torrenting, direct infringement through Claude&#x27;s lyric outputs, and DMCA violations. First reported by Music Business Worldwide.</div>
+        </div>
+        
+      <div class="context-box"><div class="context-label">Background</div>
+            <div class="context-item">
+              <div class="context-term">Benjamin Mann <span class="context-type">Who</span></div>
+              <div class="context-note">Co-founder of Anthropic, named personally as a defendant alongside Dario Amodei. Studied computer science at Columbia, was a senior software engineer at Google, then at OpenAI was one of the architects and first authors of the GPT-3 paper, working on infrastructure, efficiency and safety. He left OpenAI with the Amodeis in 2021 to found Anthropic.</div>
+            </div>
+            
+            <div class="context-item">
+              <div class="context-term">Bartz v. Anthropic <span class="context-type">What</span></div>
+              <div class="context-note">The authors&#x27; class action over Anthropic&#x27;s use of copyrighted books in training. A judge ruled that training on copyrighted works was itself lawful but that acquiring them through piracy was not; Anthropic settled and the $1.5bn settlement was approved on 20 July 2026. It is the controlling precedent the music publishers are building on, and the only calibrated dollar figure for what a case of this type has actually cost Anthropic.</div>
+            </div>
+            </div>
+      <div class="angle"><span class="angle-label">Investment angle:</span> The Bartz precedent is the reason this matters for an Anthropic-exposure thesis rather than being routine litigation noise: the court has already established that the legal exposure attaches to how the training corpus was acquired, and Anthropic has already paid $1.5bn once on exactly that theory. A second suit built on the same acquisition facts, with the CEO and a co-founder named personally, converts a one-off settlement into a recurring, uncapped liability line -- and it lands while Anthropic is reported to be preparing a September IPO at a valuation approaching $2tn. The number to watch is not the headline damages ask, which is statutory-maximum posturing, but whether the company discloses a litigation reserve; the $1.5bn Bartz figure is the only calibrated data point available for what a settlement of this class actually costs.</div>
+    </div>
+    
 
     <div class="entry-card" style="--accent:#b8860b">
 
@@ -9366,7 +9519,7 @@
     </div>
     </div>
 
-    <div class="people-section-label discovered-label">Newly discovered via mentions (81) — unconfirmed, review before treating as tracked sources</div>
+    <div class="people-section-label discovered-label">Newly discovered via mentions (83) — unconfirmed, review before treating as tracked sources</div>
     <div class="people-grid">
     <div class="person-card" style="--accent:#a33a3a" data-person="JEBistline">
       <div class="person-card-head">
@@ -10459,11 +10612,46 @@
       <div class="person-bio">Apple&#x27;s CEO from 2011 until 31 August 2026, when he handed over to hardware chief John Ternus after 15 years and became executive chairman of Apple&#x27;s board, retaining a role engaging with policymakers worldwide. Previously Apple&#x27;s COO, hired by Steve Jobs in 1998 to rebuild the supply chain. Relevant to this journal mainly because Apple remains the only large-cap platform without a first-party frontier model, making its leadership transition a live variable for AI partnership and acquisition scenarios.</div>
       
     </div>
+    <div class="person-card" style="--accent:#a33a3a" data-person="yonashav">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#a33a3a">Y</div>
+        <div>
+          <div class="person-name">Yo Shavit <span class="new-badge">NEW</span></div>
+          <div class="person-handle">@yonashav · X</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#a33a3a">Unconfirmed</div>
+      
+      <div class="person-bio">Yonadav (Yo) Shavit; until his 2026 resignation he was OpenAI&#x27;s Frontier AI Safety Policy lead, responsible for identifying the public-policy implications of the company&#x27;s technical breakthroughs. Harvard PhD in computer science (2023) on technical assurance mechanisms for accountable frontier AI development and deployment; worked on AI policy at Schmidt Futures in 2021-22 and has published on governing agentic systems and frontier AI regulation. Now works on the AI Resilience programme at the OpenAI Foundation. Added after he publicly questioned, on 1 Sep 2026, whether Astra&#x27;s refusal to break containment in OpenAI&#x27;s own test reflected alignment or the model recognising what was expected of it.</div>
+      
+    </div>
+    
+    <div class="person-card" style="--accent:#a33a3a" data-person="benjaminmann">
+      <div class="person-card-head">
+        <div class="avatar" style="background:#a33a3a">B</div>
+        <div>
+          <div class="person-name">Benjamin Mann <span class="new-badge">NEW</span></div>
+          <div class="person-handle">Benjamin Mann · Named in press</div>
+        </div>
+      </div>
+      <div class="person-cat" style="color:#a33a3a">Unconfirmed</div>
+      
+      <div class="person-bio">Co-founder of Anthropic. Studied computer science at Columbia; was a senior software engineer at Google before joining OpenAI, where he was one of the architects of GPT-3 and a first author on the GPT-3 paper, working on infrastructure, efficiency and safety. Left OpenAI in 2021 with the Amodei siblings to found Anthropic. Added because Sony Music Publishing and Warner Chappell named him personally, alongside Dario Amodei, as a defendant in their 28 Aug 2026 copyright suit. No verified public X account identified -- do not attribute posts to him without confirming the handle.</div>
+      
+    </div>
+    
         </div>
 
   </div>
   <div class="view" id="view-network">
     <div class="people-section-label">Who mentioned whom</div>
+        <div class="network-row">
+          <span class="net-person">Sam Altman</span>
+          <span class="net-arrow">mentioned →</span>
+          <span class="net-person">Yo Shavit</span>
+          <span class="net-date">2026-09-01</span>
+        </div>
+        
 
         <div class="network-row">
           <span class="net-person">Elon Musk</span>
